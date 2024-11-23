@@ -1,0 +1,42 @@
+<script type="importmap">
+  {
+    "imports": {
+      "@symbiotejs/symbiote": "https://esm.run/@symbiotejs/symbiote"
+    }
+  }
+</script>
+ 
+<script src="./index.js" type="module"></script>
+
+<style>
+  html, body {
+    padding: 0;
+    margin: 0;
+    background-color: #ccc;
+  }
+  ims-spinner {
+    border: 1px solid red;
+    max-width: 860px;
+    max-height: 570px;
+
+    [inner] {
+      padding: 20px;
+    }
+  }
+</style>
+
+<ims-spinner data="./test-data.json">
+
+  <div inner>
+    <h2>Spinner test</h2>
+    <button id="play">Play</button>
+  </div>
+
+</ims-spinner>
+
+<script>
+  let playBtn = document.getElementById('play');
+  playBtn.addEventListener('click', () => {
+    playBtn.closest('ims-spinner').togglePlay();
+  });
+</script>

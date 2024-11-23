@@ -1,0 +1,25 @@
+{
+  "name": "interactive-media-spots",
+  "version": "0.0.1",
+  "description": "Interactive Media Spots",
+  "type": "module",
+  "sideEffects": false,
+  "types": "./types/",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "",
+  "scripts": {
+    "prepare": "git config core.hooksPath .git-hooks || echo 'Not in a git repo'",
+    "types": "tsc -p"
+  },
+  "author": "team@rnd-pro.com",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "@symbiotejs/symbiote": "^2.3.2"
+  }
+}
