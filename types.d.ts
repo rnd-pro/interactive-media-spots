@@ -1,7 +1,5 @@
 declare type ImsSpinnerData = {
   autoplay: boolean,
-  imgHeight: number,
-  imgWidth: number,
   invertDirection: boolean,
   isCycled: boolean,
   motionBlur: boolean,
