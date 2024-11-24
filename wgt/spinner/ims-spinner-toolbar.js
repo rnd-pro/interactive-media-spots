@@ -30,7 +30,7 @@ ims-spinner-toolbar {
   transform: translateX(-50%);
   bottom: 10px;
   border-radius: 22px;
-  transition: .3s;
+  transition: .5s;
 
   &:hover {
     background-color: rgba(0, 0, 0, .6);

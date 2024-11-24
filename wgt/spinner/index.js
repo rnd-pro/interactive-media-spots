@@ -7,7 +7,7 @@ import { shadowCss } from './styles.js';
 export class ImsSpinner extends Symbiote {
 
   init$ = {
-    data: '',
+    srcDataUrl: '',
     fullscreen: false,
     progress: 0,
 
@@ -193,7 +193,7 @@ export class ImsSpinner extends Symbiote {
 
   /** @type {Boolean} */
   #_psFlagLoc;
-  
+
   set #playStatusFlag(/** @type {Boolean} */ val) {
     if (this.#_psFlagLoc === val) {
       return;
@@ -302,15 +302,19 @@ export class ImsSpinner extends Symbiote {
       val ? FullscreenMgr.enable(this) : FullscreenMgr.disable();
     }, false);
 
-    this.sub('data', (cfgSrc) => {
+    this.sub('srcDataUrl', (cfgSrc) => {
       if (!cfgSrc) {
         return;
       }
-      window.fetch(cfgSrc).then((resp) => {
-        resp.text().then((cfgTxt) => {
-          this.#setConfig(JSON.parse(cfgTxt));
+      try {
+        window.fetch(cfgSrc).then((resp) => {
+          resp.text().then((cfgTxt) => {
+            this.#setConfig(JSON.parse(cfgTxt));
+          });
         });
-      });
+      } catch(e) {
+        console.error(e);
+      }
     });
 
     this._localUid = UID.generate();
@@ -441,7 +445,7 @@ export class ImsSpinner extends Symbiote {
 }
 
 ImsSpinner.bindAttributes({
-  data: 'data',
+  'src-data': 'srcDataUrl',
 });
 
 ImsSpinner.shadowStyles = shadowCss;

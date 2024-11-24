@@ -24,6 +24,9 @@ export const shadowCss = css`
 :host([active]:active) {
   cursor: grabbing;
 }
+:host([active]:active) ims-spinner-toolbar {
+  opacity: .2;
+}
 
 canvas {
   box-sizing: border-box;
