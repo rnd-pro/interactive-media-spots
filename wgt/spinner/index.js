@@ -1,7 +1,8 @@
 import Symbiote, { UID } from '@symbiotejs/symbiote';
 import { ImageReader } from '../../lib/ImageReader.js';
 import { FullscreenMgr } from '../../lib/FullscreenMgr.js';
-import { template, shadowCss } from './template.js';
+import { template } from './template.js';
+import { shadowCss } from './styles.js';
 
 export class ImsSpinner extends Symbiote {
 
@@ -37,6 +38,11 @@ export class ImsSpinner extends Symbiote {
     return this._cfg;
   }
 
+  /**
+   * 
+   * @param {ImsSpinnerData} cfg 
+   * @returns 
+   */
   _setConfig(cfg) {
     if (!cfg) {
       return;
@@ -66,13 +72,13 @@ export class ImsSpinner extends Symbiote {
     }
   }
 
-  set _loadProgress(val) {
+  set _loadProgress(/** @type {Number} **/ val) {
     this.$.progress = val;
   }
 
   /**
    * 
-   * @param {*} cfg 
+   * @param {ImsSpinnerData} cfg 
    * @param {Boolean} force 
    * @returns 
    */
@@ -88,6 +94,11 @@ export class ImsSpinner extends Symbiote {
     }));
     this._imgLoadingInitialized = true;
     this._drawPreviewImage();
+
+    /**
+     * 
+     * @param {Number} val
+     */
     let progressHandler = (val) => {
       this._loadProgress = val;
       if (val === 100) {
@@ -99,14 +110,16 @@ export class ImsSpinner extends Symbiote {
       }
     };
     this.#imageReader.kill();
-    this.#imageReader.read(this.#imgArray, cfg.src, cfg.srcPreviews, progressHandler);
+    this.#imageReader.read(this.#imgArray, cfg.src, progressHandler);
     this.preview = false;
   }
 
-  set currentFrame(num) {
+  set currentFrame(/** @type {Number} **/ num) {
     if (num === this._currentFrame) {
       return;
     }
+
+    /** @type {Number} */
     this._currentFrame = num;
     let img = this.#imgArray[ num ];
     if (img) {
@@ -152,6 +165,8 @@ export class ImsSpinner extends Symbiote {
     if (this._psFlagLoc === val) {
       return;
     }
+
+    /** @type {Boolean} */
     this._psFlagLoc = val;
     if (val) {
       this.ref.toolbar.$.playStateIcon = 'manual';
@@ -302,7 +317,7 @@ export class ImsSpinner extends Symbiote {
       window.removeEventListener('touchcancel', this._moveEndHandler);
       this._moveInProgress = false;
       this._collectedMovement = (this._collectedMovement + this._lastCollectedMovement) / 2;
-      this._innertionK = 0.92;
+      this._inertiaFactor = 0.92;
     };
 
     this._moveStartHandler = (e) => {
@@ -349,7 +364,7 @@ export class ImsSpinner extends Symbiote {
           if (Math.abs(this._collectedMovement) < 0.6) {
             clearInterval(this._moveInterval);
           } else {
-            this._collectedMovement = this._collectedMovement * this._innertionK;
+            this._collectedMovement = this._collectedMovement * this._inertiaFactor;
           }
         }
       }, this.cfg.speed / 2);
