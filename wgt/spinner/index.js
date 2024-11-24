@@ -41,6 +41,7 @@ export class ImsSpinner extends Symbiote {
     if (!cfg) {
       return;
     }
+    /** @type {ImsSpinnerData} */
     this._cfg = cfg;
     this._imgHeight = cfg.imgHeight || 480;
     this._imgWidth = cfg.imgWidth || 640;

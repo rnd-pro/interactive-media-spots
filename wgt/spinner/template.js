@@ -1,6 +1,6 @@
 import { html, css } from '@symbiotejs/symbiote';
-import { } from './ims-spinner-toolbar.js';
-export { } from '../../lib/ims-progress-bar.js';
+export { ImsSpinnerToolbar} from './ims-spinner-toolbar.js';
+export { ImsProgressBar } from '../../lib/ims-progress-bar.js';
 
 export const shadowCss = css`
 :host {

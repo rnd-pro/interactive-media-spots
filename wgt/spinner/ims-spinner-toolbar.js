@@ -1,5 +1,5 @@
 import Symbiote, { html, css } from '@symbiotejs/symbiote';
-import { } from '../../lib/ims-button.js';
+export { ImsButton } from '../../lib/ims-button.js';
 
 export class ImsSpinnerToolbar extends Symbiote {
   init$ = {

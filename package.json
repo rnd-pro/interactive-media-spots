@@ -1,17 +1,20 @@
 {
   "name": "interactive-media-spots",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Interactive Media Spots",
   "type": "module",
   "sideEffects": false,
-  "types": "./types/",
+  "types": "./types.d.ts",
   "publishConfig": {
     "access": "public"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rnd-pro/interactive-media-spots.git"
+  },
   "scripts": {
     "prepare": "git config core.hooksPath .git-hooks || echo 'Not in a git repo'",
-    "types": "tsc -p"
+    "types": "tsc"
   },
   "author": "team@rnd-pro.com",
   "license": "MIT",

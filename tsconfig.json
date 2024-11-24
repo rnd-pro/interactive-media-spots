@@ -19,7 +19,7 @@
     "skipLibCheck": true,
     "maxNodeModuleJsDepth": 3,
     "types": [
-      "./types/",
+      "./types.d.ts",
       "node"
     ],
     "noEmit": true
