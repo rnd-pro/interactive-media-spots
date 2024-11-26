@@ -315,8 +315,8 @@ class ImsSpinner extends Symbiote {
       }
       try {
         window.fetch(dataUrl).then(async (resp) => {
-          if (resp.headers.get('Content-Type').toLocaleLowerCase().includes('image')) {
-            this.#setConfig(JSON.parse(await dataFromImage(dataUrl)));
+          if (resp.headers.get('Content-Type').toLowerCase().includes('image')) {
+            this.#setConfig(await dataFromImage(dataUrl));
           } else {
             resp.text().then((cfgTxt) => {
               this.#setConfig(JSON.parse(cfgTxt));
