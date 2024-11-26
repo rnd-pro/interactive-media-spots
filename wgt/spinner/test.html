@@ -34,9 +34,28 @@
 
 </ims-spinner>
 
-<script>
+<script type="module">
+  import { data2Image } from '../../lib/data2Image.js';
+  import { dataFromImage } from '../../lib/dataFromImage.js';
+
   let playBtn = document.getElementById('play');
   playBtn.addEventListener('click', () => {
     playBtn.closest('ims-spinner').togglePlay();
   });
+
+  let testData = {
+    first: 1,
+    second: 2,
+    third: [
+      'qweqweqweqe',
+    ],
+  }
+
+  let dataImage = data2Image(testData);
+
+  let img = new Image();
+  img.src = dataImage;
+  document.body.appendChild(img);
+  // console.log(dataImage);
+  console.log(await dataFromImage(dataImage));
 </script>
