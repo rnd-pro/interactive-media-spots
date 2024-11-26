@@ -9,7 +9,15 @@
   "dispatchEvents": true,
 
   "baseUrl": "https://rnd-pro.com/idn/",
-  "variantList": [],
+  "variants": [
+    "320",
+    "640",
+    "860",
+    "1024",
+    "1200",
+    "2048",
+    "max"
+  ],
   "cdnIdList": [
     "b7305977-b53c-4417-a2b7-63bcf9fbc200",
     "b469f87d-176d-4362-86a1-5397ca847400",

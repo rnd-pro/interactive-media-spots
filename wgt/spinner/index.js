@@ -3,8 +3,11 @@ import { ImageReader } from '../../lib/ImageReader.js';
 import { FullscreenMgr } from '../../lib/FullscreenMgr.js';
 import { template } from './template.js';
 import { shadowCss } from './styles.js';
+import { ImsSpinnerData } from './ImsSpinnerData.js';
+import { getVariantFit } from '../../lib/getVariantFit.js';
+import { dataFromImage } from '../../lib/dataFromImage.js';
 
-export class ImsSpinner extends Symbiote {
+class ImsSpinner extends Symbiote {
 
   init$ = {
     srcDataUrl: '',
@@ -53,19 +56,23 @@ export class ImsSpinner extends Symbiote {
     if (!cfg) {
       return;
     }
-    /** @type {ImsSpinnerData} */
-    this.#_cfg = cfg;
+
+    this.#_cfg = new ImsSpinnerData(cfg);
 
     if (this.#_cfg.baseUrl && this.#_cfg.cdnIdList?.length) {
       let variant = 'public';
-      if (this.#_cfg.variantList?.length) {
-        console.log(this.#_cfg.variantList);
+      // console.log(variant);
+      if (this.#_cfg.variants?.length) {
+        variant = getVariantFit(cfg.variants, this).toString();
+        // console.log(this.#_cfg.variants);
       }
+
+      /** @type {String[]} */
       let srcList = [];
       this.#_cfg.cdnIdList.forEach((uid) => {
         srcList.push(this.#_cfg.baseUrl + uid + '/' + variant);
       });
-      this.#_cfg.src = srcList;
+      this.#_cfg.srcList = srcList;
     }
 
     this.#ctx2d = this.canvas.getContext('2d');
@@ -119,7 +126,7 @@ export class ImsSpinner extends Symbiote {
       }
     };
     this.#imageReader.kill();
-    this.#imageReader.read(this.#imgArray, cfg.src, progressHandler);
+    this.#imageReader.read(this.#imgArray, cfg.srcList, progressHandler);
     this.preview = false;
   }
 
@@ -167,7 +174,7 @@ export class ImsSpinner extends Symbiote {
   }
 
   #drawPreviewImage() {
-    let src = this.#cfg?.placeholderUrl || this.#cfg?.src[ this.#cfg?.startFrame ] || this.#cfg?.src[ 0 ];
+    let src = this.#cfg?.placeholderUrl || this.#cfg?.srcList[this.#cfg?.startFrame] || this.#cfg?.srcList[0];
     if (!src) {
       return;
     }
@@ -289,10 +296,10 @@ export class ImsSpinner extends Symbiote {
   }
 
   #onResize = () => { 
-    console.log(this.#rect);
+    // console.log(this.#rect);
   }
 
-  initCallback() {
+  renderCallback() {
 
     /** @type {HTMLCanvasElement} */
     this.canvas = this.ref.canvas;
@@ -302,15 +309,19 @@ export class ImsSpinner extends Symbiote {
       val ? FullscreenMgr.enable(this) : FullscreenMgr.disable();
     }, false);
 
-    this.sub('srcDataUrl', (cfgSrc) => {
-      if (!cfgSrc) {
+    this.sub('srcDataUrl', (dataUrl) => {
+      if (!dataUrl) {
         return;
       }
       try {
-        window.fetch(cfgSrc).then((resp) => {
-          resp.text().then((cfgTxt) => {
-            this.#setConfig(JSON.parse(cfgTxt));
-          });
+        window.fetch(dataUrl).then(async (resp) => {
+          if (resp.headers.get('Content-Type').toLocaleLowerCase().includes('image')) {
+            this.#setConfig(JSON.parse(await dataFromImage(dataUrl)));
+          } else {
+            resp.text().then((cfgTxt) => {
+              this.#setConfig(JSON.parse(cfgTxt));
+            });
+          }
         });
       } catch(e) {
         console.error(e);
@@ -318,10 +329,6 @@ export class ImsSpinner extends Symbiote {
     });
 
     this._localUid = UID.generate();
-
-    this.defineAccessor('config', (cfg) => {
-      this.#setConfig(cfg);
-    });
 
     this._moveHandler = (e) => {
       if (e.touches) {
@@ -452,5 +459,6 @@ ImsSpinner.shadowStyles = shadowCss;
 ImsSpinner.template = template;
 ImsSpinner.reg('ims-spinner');
 
+export { ImsSpinner, ImsSpinnerData }
 export default ImsSpinner;
 

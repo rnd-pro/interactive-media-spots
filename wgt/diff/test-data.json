@@ -1,0 +1,19 @@
+{
+  "dispatchEvents": true,
+
+  "startPosition": 50,
+  "variants": [
+    "320",
+    "640",
+    "860",
+    "1024",
+    "1200",
+    "2048"
+  ],
+  "maxVariantName": "max",
+  "baseUrl": "https://rnd-pro.com/idn/",
+  "cdnIdList": [
+    "241e8036-a2f8-4189-ca11-32bb97c1d600",
+    "cb295420-e7d7-4c41-e8e7-c30d7042f700"
+  ]
+}
