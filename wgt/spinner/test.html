@@ -25,7 +25,7 @@
   }
 </style>
 
-<ims-spinner src-data="./test-data.json">
+<ims-spinner src-data="https://rnd-pro.com/idn/159cb95c-c4b8-4987-ba42-1c96b8bc0700/max">
 
   <div inner>
     <h2>Spinner test</h2>
@@ -33,6 +33,8 @@
   </div>
 
 </ims-spinner>
+
+<ims-spinner src-data="spinner_srcdata.png"></ims-spinner>
 
 <script type="module">
   import { data2Image } from '../../lib/data2Image.js';
@@ -42,20 +44,4 @@
   playBtn.addEventListener('click', () => {
     playBtn.closest('ims-spinner').togglePlay();
   });
-
-  let testData = {
-    first: 1,
-    second: 2,
-    third: [
-      'qweqweqweqe',
-    ],
-  }
-
-  let dataImage = data2Image(testData);
-
-  let img = new Image();
-  img.src = dataImage;
-  document.body.appendChild(img);
-  // console.log(dataImage);
-  console.log(await dataFromImage(dataImage));
 </script>
