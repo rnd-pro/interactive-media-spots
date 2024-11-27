@@ -5,7 +5,7 @@ import { template } from './template.js';
 import { shadowCss } from './styles.js';
 import { ImsSpinnerData } from './ImsSpinnerData.js';
 import { getVariantFit } from '../../lib/getVariantFit.js';
-import { dataFromImage } from '../../lib/dataFromImage.js';
+import { imageToData } from '../../lib/imageToData.js';
 
 class ImsSpinner extends Symbiote {
 
@@ -316,7 +316,7 @@ class ImsSpinner extends Symbiote {
       try {
         window.fetch(dataUrl).then(async (resp) => {
           if (resp.headers.get('Content-Type').toLowerCase().includes('image')) {
-            this.#setConfig(await dataFromImage(dataUrl));
+            this.#setConfig(await imageToData(dataUrl));
           } else {
             resp.text().then((cfgTxt) => {
               this.#setConfig(JSON.parse(cfgTxt));
