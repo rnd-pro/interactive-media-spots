@@ -18,7 +18,7 @@ class ImsSpinner extends Symbiote {
       this.togglePlay();
     },
     onStop: () => {
-      this.#showPreview();
+      this.#showCover();
       this.#playStatusFlag = false;
       this.ref.toolbar.$.stopIconDisabled = true;
     },
@@ -80,11 +80,18 @@ class ImsSpinner extends Symbiote {
     this.currentFrame = (cfg.startFrame && cfg.startFrame - 1) || 0;
     this._directionStep = cfg.invertDirection ? -1 : 1;
 
-    if (!cfg.showPlaceholder) {
+    if (cfg.hideUi) {
+      this.setAttribute('hide-ui', '');
+      this.togglePlay();
+    }
+
+    if (!cfg.showCover) {
       this.#loadContents(cfg, true);
       this.setAttribute('active', '');
+    } else if (cfg.autoplay) {
+      this.togglePlay();
     } else {
-      this.#showPreview();
+      this.#showCover();
     }
   }
 
@@ -174,7 +181,7 @@ class ImsSpinner extends Symbiote {
   }
 
   #drawPreviewImage() {
-    let src = this.#cfg?.placeholderUrl || this.#cfg?.srcList[this.#cfg?.startFrame] || this.#cfg?.srcList[0];
+    let src = this.#cfg?.coverUrl || this.#cfg?.srcList[this.#cfg?.startFrame] || this.#cfg?.srcList[0];
     if (!src) {
       return;
     }
@@ -186,7 +193,7 @@ class ImsSpinner extends Symbiote {
     };
   }
 
-  #showPreview() {
+  #showCover() {
     this.preview = true;
     this.#zoomOut();
     this.kill();
@@ -194,7 +201,7 @@ class ImsSpinner extends Symbiote {
     this.removeAttribute('active');
     this.#drawPreviewImage();
     window.setTimeout(() => {
-      this.#ctx2d.filter = 'none';
+      this.#ctx2d && (this.#ctx2d.filter = 'none');
     }, 300);
   }
 
@@ -224,7 +231,7 @@ class ImsSpinner extends Symbiote {
   #play() {
     this.#playStatusFlag = true;
     if (this.preview) {
-      this.#loadContents(this.#cfg);
+      this.#loadContents(this.#cfg, true);
     }
     if (this._playInterval) {
       window.clearInterval(this._playInterval);
@@ -414,14 +421,14 @@ class ImsSpinner extends Symbiote {
 
     window.addEventListener('storage', (e) => {
       if (e.key === 'IMS_CURRENT_PLAY' && window.localStorage.getItem('IMS_CURRENT_PLAY') !== this._localUid) {
-        this.#showPreview();
+        this.#showCover();
         this.#playStatusFlag = false;
       }
     });
 
     window.addEventListener('ims-current-play', (e) => {
       if (e['detail'].uid !== this._localUid) {
-        this.#showPreview();
+        this.#showCover();
         this.#playStatusFlag = false;
       }
     });

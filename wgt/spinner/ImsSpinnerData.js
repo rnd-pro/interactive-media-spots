@@ -1,15 +1,20 @@
 export class ImsSpinnerData {
+  // Common properties:
+  imsType = 'spinner';
+  hideUi = false;
+  baseUrl = '';
+  /** @type {String[]} */
+  variants = [];
+
+  // Specific properties:
   autoplay = false;
   invertDirection = false;
   isCycled = true;
   motionBlur = false;
-  placeholderUrl = '';
-  showPlaceholder = true;
+  coverUrl = '';
+  showCover = true;
   speed = 50;
   dispatchEvents = false;
-  baseUrl = '';
-  /** @type {String[]} */
-  variants = [];
   /** @type {String[]} */
   cdnIdList = [];
   /** @type {String[]} */

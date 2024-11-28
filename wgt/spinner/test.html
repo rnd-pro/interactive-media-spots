@@ -34,12 +34,9 @@
 
 </ims-spinner>
 
-<ims-spinner src-data="spinner_srcdata.png"></ims-spinner>
+<ims-spinner src-data="spinner_v3.png"></ims-spinner>
 
 <script type="module">
-  import { data2Image } from '../../lib/data2Image.js';
-  import { dataFromImage } from '../../lib/dataFromImage.js';
-
   let playBtn = document.getElementById('play');
   playBtn.addEventListener('click', () => {
     playBtn.closest('ims-spinner').togglePlay();

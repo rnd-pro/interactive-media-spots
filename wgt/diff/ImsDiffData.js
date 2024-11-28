@@ -1,10 +1,14 @@
 export class ImsDiffData {
-  dispatchEvents = false;
-  startPosition = 50;
+  // Common properties:
+  imsType = 'spinner';
+  hideUi = false;
+  baseUrl = '';
   /** @type {String[]} */
   variants = [];
+
+  dispatchEvents = false;
+  startPosition = 50;
   maxVariantName = '';
-  baseUrl = '';
   /** @type {String[]} */
   cdnIdList = [];
 
