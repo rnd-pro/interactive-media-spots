@@ -1,6 +1,9 @@
+import { VERSION } from '../../lib/version.js';
+
 export class ImsSpinnerData {
   // Common properties:
   imsType = 'spinner';
+  version = VERSION;
   hideUi = false;
   baseUrl = '';
   /** @type {String[]} */
@@ -8,6 +11,7 @@ export class ImsSpinnerData {
 
   // Specific properties:
   autoplay = false;
+  startFrame = 1;
   invertDirection = false;
   isCycled = true;
   motionBlur = false;
@@ -19,7 +23,6 @@ export class ImsSpinnerData {
   cdnIdList = [];
   /** @type {String[]} */
   srcList = [];
-  startFrame = 1;
 
   /**
    * 

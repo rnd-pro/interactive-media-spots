@@ -1,6 +1,9 @@
+import { VERSION } from '../../lib/version.js';
+
 export class ImsDiffData {
   // Common properties:
-  imsType = 'spinner';
+  imsType = 'diff';
+  version = VERSION;
   hideUi = false;
   baseUrl = '';
   /** @type {String[]} */

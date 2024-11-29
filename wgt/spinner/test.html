@@ -34,10 +34,10 @@
 
 </ims-spinner>
 
-<ims-spinner src-data="spinner_v3.png"></ims-spinner>
+<ims-spinner src-data="./test-data.json"></ims-spinner>
 
 <script type="module">
-  let playBtn = document.getElementById('play');
+  let playBtn = document.querySelector('#play');
   playBtn.addEventListener('click', () => {
     playBtn.closest('ims-spinner').togglePlay();
   });
