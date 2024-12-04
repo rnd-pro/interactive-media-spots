@@ -18,6 +18,7 @@ export class ImsSpinnerData {
   coverUrl = '';
   showCover = true;
   speed = 50;
+  multiplePlay = false;
   dispatchEvents = false;
   /** @type {String[]} */
   cdnIdList = [];

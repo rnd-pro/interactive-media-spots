@@ -1,4 +1,4 @@
-import Symbiote, { UID } from '@symbiotejs/symbiote';
+import Symbiote, { UID, kebabToCamel } from '@symbiotejs/symbiote';
 import { ImageReader } from '../../lib/ImageReader.js';
 import { FullscreenMgr } from '../../lib/FullscreenMgr.js';
 import { template } from './template.js';
@@ -19,6 +19,7 @@ class ImsSpinner extends Symbiote {
     },
     onStop: () => {
       this.#showCover();
+      this.#currentFrame = this.#cfg?.startFrame || 0;
       this.#playStatusFlag = false;
       this.ref.toolbar.$.stopIconDisabled = true;
     },
@@ -44,6 +45,9 @@ class ImsSpinner extends Symbiote {
   /** @type {ImsSpinnerData} */
   #_cfg;
 
+  /** @type {Partial<ImsSpinnerData>} */
+  #override = {};
+
   /** @type {CanvasRenderingContext2D} */
   #ctx2d;
 
@@ -56,8 +60,10 @@ class ImsSpinner extends Symbiote {
     if (!cfg) {
       return;
     }
-
+    Object.assign(cfg, this.#override);
     this.#_cfg = new ImsSpinnerData(cfg);
+    
+    // console.log(this.#_cfg);
 
     if (this.#_cfg.baseUrl && this.#_cfg.cdnIdList?.length) {
       let variant = 'public';
@@ -81,7 +87,8 @@ class ImsSpinner extends Symbiote {
     this._directionStep = cfg.invertDirection ? -1 : 1;
 
     if (cfg.hideUi) {
-      this.setAttribute('hide-ui', '');
+      this.setAttribute('no-ui', '');
+      this.#loadContents(cfg, true);
       this.togglePlay();
     }
 
@@ -89,6 +96,7 @@ class ImsSpinner extends Symbiote {
       this.#loadContents(cfg, true);
       this.setAttribute('active', '');
     } else if (cfg.autoplay) {
+      this.#loadContents(this.#cfg, true);
       this.togglePlay();
     } else {
       this.#showCover();
@@ -304,6 +312,20 @@ class ImsSpinner extends Symbiote {
 
   #onResize = () => { 
     // console.log(this.#rect);
+  }
+
+  initCallback() {
+    let dataRef = new ImsSpinnerData();
+    [...this.attributes].forEach((attr) => {
+      let prop = kebabToCamel(attr.name);
+      if (dataRef.hasOwnProperty(prop)) {
+        try {
+          this.#override[prop] = JSON.parse(this.getAttribute(attr.name));
+        } catch(err) {
+          console.warn('[IMS] Bad attribute value: ' + attr.name);
+        }
+      }
+    });
   }
 
   renderCallback() {

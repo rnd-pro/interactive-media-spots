@@ -27,7 +27,7 @@ export const shadowCss = css`
 :host([active]:active) ims-spinner-toolbar {
   opacity: .2;
 }
-:host([hide-ui]) {
+:host([no-ui]) {
   ims-spinner-toolbar {
     display: none;
   }
