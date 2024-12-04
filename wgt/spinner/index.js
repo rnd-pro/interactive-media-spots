@@ -6,6 +6,9 @@ import { shadowCss } from './styles.js';
 import { ImsSpinnerData } from './ImsSpinnerData.js';
 import { getVariantFit } from '../../lib/getVariantFit.js';
 import { imageToData } from '../../lib/imageToData.js';
+import { ResizeController } from '../../lib/ResizeController.js';
+
+const CURRENT_PLAY_EVENT_NAME = 'ims-current-play';
 
 class ImsSpinner extends Symbiote {
 
@@ -51,6 +54,23 @@ class ImsSpinner extends Symbiote {
   /** @type {CanvasRenderingContext2D} */
   #ctx2d;
 
+  #fillSrcVariantList() {
+    if (this.#_cfg?.baseUrl && this.#_cfg?.cdnIdList?.length) {
+      let variant = 'public';
+      // console.log(variant);
+      if (this.#_cfg.variants?.length) {
+        variant = getVariantFit(this.#_cfg.variants, this).toString();
+      }
+
+      /** @type {String[]} */
+      let srcList = [];
+      this.#_cfg.cdnIdList.forEach((uid) => {
+        srcList.push(this.#_cfg.baseUrl + uid + '/' + variant);
+      });
+      this.#_cfg.srcList = srcList;
+    }
+  }
+
   /**
    * 
    * @param {ImsSpinnerData} cfg 
@@ -64,22 +84,6 @@ class ImsSpinner extends Symbiote {
     this.#_cfg = new ImsSpinnerData(cfg);
     
     // console.log(this.#_cfg);
-
-    if (this.#_cfg.baseUrl && this.#_cfg.cdnIdList?.length) {
-      let variant = 'public';
-      // console.log(variant);
-      if (this.#_cfg.variants?.length) {
-        variant = getVariantFit(cfg.variants, this).toString();
-        // console.log(this.#_cfg.variants);
-      }
-
-      /** @type {String[]} */
-      let srcList = [];
-      this.#_cfg.cdnIdList.forEach((uid) => {
-        srcList.push(this.#_cfg.baseUrl + uid + '/' + variant);
-      });
-      this.#_cfg.srcList = srcList;
-    }
 
     this.#ctx2d = this.canvas.getContext('2d');
 
@@ -114,17 +118,22 @@ class ImsSpinner extends Symbiote {
    * @returns 
    */
   #loadContents(cfg, force = false) {
+    if (!cfg) {
+      return;
+    }
     if (this._imgLoadingInitialized && !this.preview && !force) {
       return;
     }
     window.localStorage.setItem('IMS_CURRENT_PLAY', this._localUid);
-    window.dispatchEvent(new CustomEvent('ims-current-play', {
+    window.dispatchEvent(new CustomEvent(CURRENT_PLAY_EVENT_NAME, {
       detail: {
         uid: this._localUid,
       },
     }));
     this._imgLoadingInitialized = true;
-    this.#drawPreviewImage();
+    // if (cfg.showCover) {
+    //   this.#drawPreviewImage();
+    // }
 
     /**
      * 
@@ -140,7 +149,8 @@ class ImsSpinner extends Symbiote {
         }
       }
     };
-    this.#imageReader.kill();
+    // this.#imageReader.kill();
+    this.#fillSrcVariantList();
     this.#imageReader.read(this.#imgArray, cfg.srcList, progressHandler);
     this.preview = false;
   }
@@ -253,6 +263,10 @@ class ImsSpinner extends Symbiote {
         this.currentFrame = this._directionStep < 0 ? this.currentFrame - 1 : 0;
       }
     }, this.#cfg.speed);
+    
+    ResizeController.add(this, () => {
+      this.#onResize();
+    });
   }
 
   togglePlay(e) {
@@ -311,6 +325,7 @@ class ImsSpinner extends Symbiote {
   }
 
   #onResize = () => { 
+    this.#loadContents(this.#cfg, true);
     // console.log(this.#rect);
   }
 
@@ -448,35 +463,27 @@ class ImsSpinner extends Symbiote {
       }
     });
 
-    window.addEventListener('ims-current-play', (e) => {
+    window.addEventListener(CURRENT_PLAY_EVENT_NAME, (e) => {
+      if (this.#cfg.multiplePlay) {
+        return;
+      }
       if (e['detail'].uid !== this._localUid) {
         this.#showCover();
         this.#playStatusFlag = false;
       }
     });
-
-    window.addEventListener('fullscreen-changed', () => {
-      window.setTimeout(() => {
-        this.#onResize();
-      }, 220);
-    });
-
-    this.#onResize();
   }
 
   kill() {
     this._imgLoadingInitialized = false;
-    this.#imageReader.kill();
+    this.#imageReader.clear();
     this._playInterval && window.clearInterval(this._playInterval);
-    this.#imgArray.forEach((img) => {
-      img && (img.src = '');
-      img = null;
-    });
-    this.#imgArray = [];
   }
 
   destroyCallback() {
     this.kill();
+    this.#imgArray = [];
+    ResizeController.remove(this);
   }
 }
 
