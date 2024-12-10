@@ -246,15 +246,18 @@ class ImsSpinner extends Symbiote {
     return this.#_psFlagLoc;
   }
 
+  /** @type {Number} */
+  #playInterval;
+
   #play() {
     this.#playStatusFlag = true;
     if (this.preview) {
       this.#loadContents(this.#cfg, true);
     }
-    if (this._playInterval) {
-      window.clearInterval(this._playInterval);
+    if (this.#playInterval) {
+      window.clearInterval(this.#playInterval);
     }
-    this._playInterval = window.setInterval(() => {
+    this.#playInterval = window.setInterval(() => {
       if (this.currentFrame < this.#imgArray.length - 1 && this.currentFrame > 0) {
         this.currentFrame = this.currentFrame + this._directionStep;
       } else if (this.currentFrame === 0) {
@@ -282,7 +285,7 @@ class ImsSpinner extends Symbiote {
 
   #pause() {
     this.#playStatusFlag = false;
-    clearInterval(this._playInterval);
+    clearInterval(this.#playInterval);
   }
 
   #setCanvasTransforms() {
@@ -320,13 +323,8 @@ class ImsSpinner extends Symbiote {
     this.removeEventListener('mousemove', this._zoomPanHandler);
   }
 
-  get #rect() {
-    return this.getBoundingClientRect();
-  }
-
-  #onResize = () => { 
+  #onResize() { 
     this.#loadContents(this.#cfg, true);
-    // console.log(this.#rect);
   }
 
   initCallback() {
@@ -342,6 +340,78 @@ class ImsSpinner extends Symbiote {
       }
     });
   }
+
+  #moveHandler = (e) => {
+    if (e.touches) {
+      e.preventDefault();
+      e.movementX = e.touches[ 0 ].clientX - (this._touchStartX || e.touches[ 0 ].clientX);
+      e.movementY = e.touches[ 0 ].clientY - (this._touchStartY || e.touches[ 0 ].clientY);
+      this._touchStartX = e.touches[ 0 ].clientX;
+      this._touchStartY = e.touches[ 0 ].clientY;
+    }
+    this._collectedMovement += e.movementX;
+  };
+
+  #moveEndHandler = () => {
+    window.onmousemove = null;
+    window.onmouseup = null;
+    window.removeEventListener('touchmove', this.#moveHandler);
+    window.removeEventListener('touchend', this.#moveEndHandler);
+    window.removeEventListener('touchcancel', this.#moveEndHandler);
+    this._moveInProgress = false;
+    this._collectedMovement = (this._collectedMovement + this._lastCollectedMovement) / 2;
+    this._inertiaFactor = 0.92;
+  };
+
+  #intervalInit = () => {
+    this._moveInterval = setInterval(() => {
+      let sizeFactor = this._componentWidth / (this._componentWidth / 500);
+      let movementProportion = this._collectedMovement / sizeFactor;
+      let frameShift = Math.round((this.#imgArray.length - 1) * movementProportion);
+      let frame = this._directionStep > 0 ? this.currentFrame + frameShift : this.currentFrame - frameShift;
+      if (frame > this.#imgArray.length - 1) {
+        frame = Math.abs(frame - (this.#imgArray.length - 1));
+      } if (frame < 0) {
+        frame = this.#imgArray.length - 1 - Math.abs(frame);
+      }
+      this.currentFrame = frame > -1 && frame < this.#imgArray.length ? frame : 0;
+      if (this._moveInProgress) {
+        this._lastCollectedMovement = this._collectedMovement;
+        this._collectedMovement = 0;
+      } else {
+        if (Math.abs(this._collectedMovement) < 0.6) {
+          clearInterval(this._moveInterval);
+        } else {
+          this._collectedMovement = this._collectedMovement * this._inertiaFactor;
+        }
+      }
+    }, this.#cfg.speed / 2);
+  };
+
+  #moveStartHandler = (e) => {
+    if (this.preview) {
+      return;
+    }
+    this.#pause();
+    this._moveInProgress = true;
+    if (e.touches) {
+      this._touchStartX = e.touches[ 0 ].clientX;
+      this._touchStartY = e.touches[ 0 ].clientY;
+    }
+    this._moveFrame = this.currentFrame;
+    let rect = this.getBoundingClientRect();
+    this._componentWidth = rect.width;
+    window.onmousemove = this.#moveHandler;
+    window.onmouseup = this.#moveEndHandler;
+
+    window.addEventListener('touchmove', this.#moveHandler, { passive: false });
+    window.addEventListener('touchend', this.#moveEndHandler);
+    window.addEventListener('touchcancel', this.#moveEndHandler);
+
+    this._collectedMovement = 0;
+
+    this.#intervalInit();
+  };
 
   renderCallback() {
 
@@ -374,80 +444,8 @@ class ImsSpinner extends Symbiote {
 
     this._localUid = UID.generate();
 
-    this._moveHandler = (e) => {
-      if (e.touches) {
-        e.preventDefault();
-        e.movementX = e.touches[ 0 ].clientX - (this._touchStartX || e.touches[ 0 ].clientX);
-        e.movementY = e.touches[ 0 ].clientY - (this._touchStartY || e.touches[ 0 ].clientY);
-        this._touchStartX = e.touches[ 0 ].clientX;
-        this._touchStartY = e.touches[ 0 ].clientY;
-      }
-      this._collectedMovement += e.movementX;
-    };
-
-    this._moveEndHandler = (e) => {
-      window.onmousemove = null;
-      window.onmouseup = null;
-      window.removeEventListener('touchmove', this._moveHandler);
-      window.removeEventListener('touchend', this._moveEndHandler);
-      window.removeEventListener('touchcancel', this._moveEndHandler);
-      this._moveInProgress = false;
-      this._collectedMovement = (this._collectedMovement + this._lastCollectedMovement) / 2;
-      this._inertiaFactor = 0.92;
-    };
-
-    this._moveStartHandler = (e) => {
-      if (this.preview) {
-        return;
-      }
-      this.#pause();
-      this._moveInProgress = true;
-      if (e.touches) {
-        this._touchStartX = e.touches[ 0 ].clientX;
-        this._touchStartY = e.touches[ 0 ].clientY;
-      }
-      this._moveFrame = this.currentFrame;
-      let rect = this.getBoundingClientRect();
-      this._componentWidth = rect.width;
-      window.onmousemove = this._moveHandler;
-      window.onmouseup = this._moveEndHandler;
-
-      window.addEventListener('touchmove', this._moveHandler, { passive: false });
-      window.addEventListener('touchend', this._moveEndHandler);
-      window.addEventListener('touchcancel', this._moveEndHandler);
-
-      this._collectedMovement = 0;
-
-      this._intervalInit();
-    };
-
-    this._intervalInit = () => {
-      this._moveInterval = setInterval(() => {
-        let sizeFactor = this._componentWidth / (this._componentWidth / 500);
-        let movementProportion = this._collectedMovement / sizeFactor;
-        let frameShift = Math.round((this.#imgArray.length - 1) * movementProportion);
-        let frame = this._directionStep > 0 ? this.currentFrame + frameShift : this.currentFrame - frameShift;
-        if (frame > this.#imgArray.length - 1) {
-          frame = Math.abs(frame - (this.#imgArray.length - 1));
-        } if (frame < 0) {
-          frame = this.#imgArray.length - 1 - Math.abs(frame);
-        }
-        this.currentFrame = frame > -1 && frame < this.#imgArray.length ? frame : 0;
-        if (this._moveInProgress) {
-          this._lastCollectedMovement = this._collectedMovement;
-          this._collectedMovement = 0;
-        } else {
-          if (Math.abs(this._collectedMovement) < 0.6) {
-            clearInterval(this._moveInterval);
-          } else {
-            this._collectedMovement = this._collectedMovement * this._inertiaFactor;
-          }
-        }
-      }, this.#cfg.speed / 2);
-    };
-
-    this.ref.sensor.onmousedown = this._moveStartHandler;
-    this.ref.sensor.addEventListener('touchstart', this._moveStartHandler);
+    this.ref.sensor.onmousedown = this.#moveStartHandler;
+    this.ref.sensor.addEventListener('touchstart', this.#moveStartHandler);
 
     window.onkeyup = (e) => {
       if (e.keyCode === 32) {
@@ -477,7 +475,7 @@ class ImsSpinner extends Symbiote {
   kill() {
     this._imgLoadingInitialized = false;
     this.#imageReader.clear();
-    this._playInterval && window.clearInterval(this._playInterval);
+    this.#playInterval && window.clearInterval(this.#playInterval);
   }
 
   destroyCallback() {
