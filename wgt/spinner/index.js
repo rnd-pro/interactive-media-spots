@@ -124,10 +124,10 @@ class ImsSpinner extends Symbiote {
     if (this._imgLoadingInitialized && !this.preview && !force) {
       return;
     }
-    window.localStorage.setItem('IMS_CURRENT_PLAY', this._localUid);
+    window.localStorage.setItem('IMS_CURRENT_PLAY', this.#localUid);
     window.dispatchEvent(new CustomEvent(CURRENT_PLAY_EVENT_NAME, {
       detail: {
-        uid: this._localUid,
+        uid: this.#localUid,
       },
     }));
     this._imgLoadingInitialized = true;
@@ -413,6 +413,8 @@ class ImsSpinner extends Symbiote {
     this.#intervalInit();
   };
 
+  #localUid = UID.generate();
+
   renderCallback() {
 
     /** @type {HTMLCanvasElement} */
@@ -442,8 +444,6 @@ class ImsSpinner extends Symbiote {
       }
     });
 
-    this._localUid = UID.generate();
-
     this.ref.sensor.onmousedown = this.#moveStartHandler;
     this.ref.sensor.addEventListener('touchstart', this.#moveStartHandler);
 
@@ -455,7 +455,7 @@ class ImsSpinner extends Symbiote {
     };
 
     window.addEventListener('storage', (e) => {
-      if (e.key === 'IMS_CURRENT_PLAY' && window.localStorage.getItem('IMS_CURRENT_PLAY') !== this._localUid) {
+      if (e.key === 'IMS_CURRENT_PLAY' && window.localStorage.getItem('IMS_CURRENT_PLAY') !== this.#localUid) {
         this.#showCover();
         this.#playStatusFlag = false;
       }
@@ -465,7 +465,7 @@ class ImsSpinner extends Symbiote {
       if (this.#cfg.multiplePlay) {
         return;
       }
-      if (e['detail'].uid !== this._localUid) {
+      if (e['detail'].uid !== this.#localUid) {
         this.#showCover();
         this.#playStatusFlag = false;
       }
