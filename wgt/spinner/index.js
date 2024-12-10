@@ -7,6 +7,7 @@ import { ImsSpinnerData } from './ImsSpinnerData.js';
 import { getVariantFit } from '../../lib/getVariantFit.js';
 import { imageToData } from '../../lib/imageToData.js';
 import { ResizeController } from '../../lib/ResizeController.js';
+import { loadSourceData } from '../../lib/loadSourceData.js'; 
 
 const CURRENT_PLAY_EVENT_NAME = 'ims-current-play';
 
@@ -425,23 +426,11 @@ class ImsSpinner extends Symbiote {
       val ? FullscreenMgr.enable(this) : FullscreenMgr.disable();
     }, false);
 
-    this.sub('srcDataUrl', (dataUrl) => {
+    this.sub('srcDataUrl', async (dataUrl) => {
       if (!dataUrl) {
         return;
       }
-      try {
-        window.fetch(dataUrl).then(async (resp) => {
-          if (resp.headers.get('Content-Type').toLowerCase().includes('image')) {
-            this.#setConfig(await imageToData(dataUrl));
-          } else {
-            resp.text().then((cfgTxt) => {
-              this.#setConfig(JSON.parse(cfgTxt));
-            });
-          }
-        });
-      } catch(e) {
-        console.error(e);
-      }
+      this.#setConfig(await loadSourceData(dataUrl));
     });
 
     this.ref.sensor.onmousedown = this.#moveStartHandler;
