@@ -61,6 +61,8 @@ class ImsDiff extends Symbiote {
     ResizeController.add(this, () => {
       this.#rect = this.#canvas.getBoundingClientRect();
       this.#loadImages(this.srcData);
+      this.#draw(0, 0.5);
+      this.ref.slider.style.left = '50%';
     });
   }
 
@@ -109,7 +111,7 @@ class ImsDiff extends Symbiote {
     let left = e.clientX - this.#rect.left;
     this.ref.slider.style.left = `${left}px`;
     let k = left / this.#rect.width;
-    console.log(k);
+    // console.log(k);
     this.#draw(0, k);
   }
 
@@ -153,10 +155,18 @@ class ImsDiff extends Symbiote {
       this.#ctx2d.filter = filter1;
     }
     this.#ctx2d.drawImage(img1, 0, 0, w, h);
+ 
+    let imgAspect = w / h;
+    let containerAspect = this.#rect.width / this.#rect.height;
+    let containVertical = imgAspect < containerAspect;
+    if (containVertical) {
+      w = w * containerAspect / imgAspect;
+    }
+    let gap = w * (1 - lk);
 
-    let gap = w * (1- lk);
-
-    let sx = w - gap;
+    let leftOffsetVal = 56; // TODO: calculate this value from aspect data
+    let leftOffset = containVertical ? leftOffsetVal : 0;
+    let sx = w - gap - leftOffset;
     let sy = 0;
     let sWidth = img2.width - sx;
     let sHeight = h;
