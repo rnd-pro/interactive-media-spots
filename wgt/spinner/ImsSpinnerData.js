@@ -8,6 +8,7 @@ export class ImsSpinnerData {
   baseUrl = '';
   /** @type {String[]} */
   variants = [];
+  maxVariantName = '';
 
   // Specific properties:
   autoplay = false;

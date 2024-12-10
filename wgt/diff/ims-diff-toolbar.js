@@ -3,9 +3,6 @@ export { ImsButton } from '../../lib/ims-button.js';
 
 export class ImsDiffToolbar extends Symbiote {
   init$ = {
-    playStateIcon: 'play',
-    stopIconDisabled: true,
-    zoomStateIcon: 'zoom_in',
     fsStateIcon: 'fs_on',
   }
 
@@ -40,10 +37,7 @@ ims-diff-toolbar {
 `;
 
 ImsDiffToolbar.template = html`
-<ims-button ${{onclick: '^onPlayPause', '@icon': 'playStateIcon'}}></ims-button>
-<ims-button ${{onclick: '^onStop', '@disabled': 'stopIconDisabled'}} icon="stop"></ims-button>
-<ims-button ${{onclick: '^onZoomIn'}} icon="zoom_in"></ims-button>
-<ims-button ${{onclick: '^onZoomOut'}} icon="zoom_out"></ims-button>
+<ims-button ${{onclick: '^onFilter'}} icon="blur"></ims-button>
 <ims-button ${{onclick: '^onFs', '@icon': 'fsStateIcon'}}></ims-button>
 `;
 

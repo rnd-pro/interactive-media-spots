@@ -14,15 +14,27 @@ export const DIFF_STYLES = css`
     background-position: center center;
     overflow: hidden;
     box-sizing: border-box;
-  }
-  canvas {
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-    cursor: grab;
 
-    &:active {
-      cursor: grabbing;
+    canvas {
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+      cursor: grab;
+  
+      &:active {
+        cursor: grabbing;
+      }
+    }
+
+    div[slider] {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      background-color: var(--color-slider, rgba(0, 0, 0, 0.5));
+      pointer-events: none;
     }
   }
+
 `;

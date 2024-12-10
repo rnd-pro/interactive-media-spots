@@ -1,7 +1,8 @@
 {
+  "imsType": "diff",
+  "version": "0.0.14",
   "dispatchEvents": true,
-
-  "startPosition": 50,
+  "baseUrl": "https://rnd-pro.com/idn/",
   "variants": [
     "320",
     "640",
@@ -11,9 +12,14 @@
     "2048"
   ],
   "maxVariantName": "max",
-  "baseUrl": "https://rnd-pro.com/idn/",
+  "startPosition": 50,
+  
   "cdnIdList": [
-    "241e8036-a2f8-4189-ca11-32bb97c1d600",
-    "cb295420-e7d7-4c41-e8e7-c30d7042f700"
+    "e47b0750-db87-4fc0-c120-f4dfd53f0500",
+    "e47b0750-db87-4fc0-c120-f4dfd53f0500"
+  ],
+  "filters": [
+    "grayscale(100%)",
+    "invert(100%)"
   ]
 }

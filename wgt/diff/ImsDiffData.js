@@ -14,6 +14,8 @@ export class ImsDiffData {
   maxVariantName = '';
   /** @type {String[]} */
   cdnIdList = [];
+  /** @type {String[]} */
+  filters = [];
 
   /**
    * 
