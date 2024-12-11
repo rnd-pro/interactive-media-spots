@@ -14,7 +14,7 @@
   },
   "scripts": {
     "prepare": "git config core.hooksPath .git-hooks || echo 'Not in a git repo'",
-    "types": "tsc"
+    "types": "tsc -p hook.json"
   },
   "author": "team@rnd-pro.com",
   "license": "MIT",
@@ -23,6 +23,7 @@
     "typescript": "^5.4.3"
   },
   "dependencies": {
-    "@symbiotejs/symbiote": "^2.3.2"
+    "@symbiotejs/symbiote": "^2.3.2",
+    "three": "^0.171.0"
   }
 }
