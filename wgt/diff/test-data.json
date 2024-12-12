@@ -1,6 +1,6 @@
 {
   "imsType": "diff",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "dispatchEvents": true,
   "baseUrl": "https://rnd-pro.com/idn/",
   "variants": [
