@@ -2,7 +2,7 @@ import { VERSION } from '../../lib/version.js';
 
 export class ImsPanoData {
   // Common properties:
-  imsType = 'diff';
+  imsType = 'pano';
   version = VERSION;
   hideUi = false;
   baseUrl = '';
