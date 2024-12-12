@@ -12,7 +12,7 @@
     "1200",
     "2048"
   ],
-  "autoplay": true,
+  "autoplay": false,
   "startFrame": 0,
   "invertDirection": false,
   "isCycled": true,

@@ -74,6 +74,13 @@ Configuration example:
 }
 ```
 
+### ims-viewer
+Universal component, that loads dependencies dynamically using CDN with the certain application version support.
+
+```html
+<ims-viewer src-data="./spinner-data.json"></ims-viewer>
+```
+
 ## Installation
 
 1. Include the components via CDN or local files:

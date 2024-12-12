@@ -1,29 +1,22 @@
-import Symbiote, { UID, kebabToCamel } from '@symbiotejs/symbiote';
+import { ImsBaseClass, UID } from '../../lib/ImsBaseClass.js';
 import { ImageReader } from '../../lib/ImageReader.js';
-import { FullscreenMgr } from '../../lib/FullscreenMgr.js';
 import { template } from './template.js';
 import { shadowCss } from './styles.js';
 import { ImsSpinnerData } from './ImsSpinnerData.js';
-import { getVariantFit } from '../../lib/getVariantFit.js';
-import { imageToData } from '../../lib/imageToData.js';
-import { ResizeController } from '../../lib/ResizeController.js';
-import { loadSourceData } from '../../lib/loadSourceData.js'; 
 
 const CURRENT_PLAY_EVENT_NAME = 'ims-current-play';
 
-class ImsSpinner extends Symbiote {
+class ImsSpinner extends ImsBaseClass {
+
+  dataClass = ImsSpinnerData;
 
   init$ = {
-    srcDataUrl: '',
-    fullscreen: false,
-    progress: 0,
-
     onPlayPause: () => {
       this.togglePlay();
     },
     onStop: () => {
       this.#showCover();
-      this.#currentFrame = this.#cfg?.startFrame || 0;
+      this.#currentFrame = this.srcData?.startFrame || 0;
       this.#playStatusFlag = false;
       this.ref.toolbar.$.stopIconDisabled = true;
     },
@@ -33,75 +26,33 @@ class ImsSpinner extends Symbiote {
     onZoomOut: () => {
       this.#zoomOut();
     },
-    onFs: () => {
-      this.$.fullscreen = !this.$.fullscreen;
-    },
   }
 
   /** @type {HTMLImageElement[]} */
   #imgArray = [];
   #imageReader = new ImageReader();
 
-  get #cfg() {
-    return this.#_cfg;
-  }
-
-  /** @type {ImsSpinnerData} */
-  #_cfg;
-
-  /** @type {Partial<ImsSpinnerData>} */
-  #override = {};
-
   /** @type {CanvasRenderingContext2D} */
   #ctx2d;
 
-  #fillSrcVariantList() {
-    if (this.#_cfg?.baseUrl && this.#_cfg?.cdnIdList?.length) {
-      let variant = 'public';
-      // console.log(variant);
-      if (this.#_cfg.variants?.length) {
-        variant = getVariantFit(this.#_cfg.variants, this).toString();
-      }
-
-      /** @type {String[]} */
-      let srcList = [];
-      this.#_cfg.cdnIdList.forEach((uid) => {
-        srcList.push(this.#_cfg.baseUrl + uid + '/' + variant);
-      });
-      this.#_cfg.srcList = srcList;
-    }
-  }
-
-  /**
-   * 
-   * @param {ImsSpinnerData} cfg 
-   * @returns 
-   */
-  #setConfig(cfg) {
-    if (!cfg) {
-      return;
-    }
-    Object.assign(cfg, this.#override);
-    this.#_cfg = new ImsSpinnerData(cfg);
+  init() {
+    if (!this.srcData) return;
     
-    // console.log(this.#_cfg);
-
     this.#ctx2d = this.canvas.getContext('2d');
+    this.currentFrame = (this.srcData.startFrame && this.srcData.startFrame - 1) || 0;
+    this._directionStep = this.srcData.invertDirection ? -1 : 1;
 
-    this.currentFrame = (cfg.startFrame && cfg.startFrame - 1) || 0;
-    this._directionStep = cfg.invertDirection ? -1 : 1;
-
-    if (cfg.hideUi) {
+    if (this.srcData.hideUi) {
       this.setAttribute('no-ui', '');
-      this.#loadContents(cfg, true);
+      this.#loadContents(this.srcData, true);
       this.togglePlay();
     }
 
-    if (!cfg.showCover) {
-      this.#loadContents(cfg, true);
+    if (!this.srcData.showCover) {
+      this.#loadContents(this.srcData, true);
       this.setAttribute('active', '');
-    } else if (cfg.autoplay) {
-      this.#loadContents(this.#cfg, true);
+    } else if (this.srcData.autoplay) {
+      this.#loadContents(this.srcData, true);
       this.togglePlay();
     } else {
       this.#showCover();
@@ -132,9 +83,6 @@ class ImsSpinner extends Symbiote {
       },
     }));
     this._imgLoadingInitialized = true;
-    // if (cfg.showCover) {
-    //   this.#drawPreviewImage();
-    // }
 
     /**
      * 
@@ -151,7 +99,7 @@ class ImsSpinner extends Symbiote {
       }
     };
     // this.#imageReader.kill();
-    this.#fillSrcVariantList();
+    this.fillSrcVariantList();
     this.#imageReader.read(this.#imgArray, cfg.srcList, progressHandler);
     this.preview = false;
   }
@@ -200,7 +148,7 @@ class ImsSpinner extends Symbiote {
   }
 
   #drawPreviewImage() {
-    let src = this.#cfg?.coverUrl || this.#cfg?.srcList[this.#cfg?.startFrame] || this.#cfg?.srcList[0];
+    let src = this.srcData?.coverUrl || this.srcData?.srcList[this.srcData?.startFrame] || this.srcData?.srcList[0];
     if (!src) {
       return;
     }
@@ -253,7 +201,7 @@ class ImsSpinner extends Symbiote {
   #play() {
     this.#playStatusFlag = true;
     if (this.preview) {
-      this.#loadContents(this.#cfg, true);
+      this.#loadContents(this.srcData, true);
     }
     if (this.#playInterval) {
       window.clearInterval(this.#playInterval);
@@ -266,11 +214,7 @@ class ImsSpinner extends Symbiote {
       } else if (this.currentFrame === this.#imgArray.length - 1) {
         this.currentFrame = this._directionStep < 0 ? this.currentFrame - 1 : 0;
       }
-    }, this.#cfg.speed);
-    
-    ResizeController.add(this, () => {
-      this.#onResize();
-    });
+    }, this.srcData.speed);
   }
 
   togglePlay(e) {
@@ -324,22 +268,9 @@ class ImsSpinner extends Symbiote {
     this.removeEventListener('mousemove', this._zoomPanHandler);
   }
 
-  #onResize() { 
-    this.#loadContents(this.#cfg, true);
-  }
-
-  initCallback() {
-    let dataRef = new ImsSpinnerData();
-    [...this.attributes].forEach((attr) => {
-      let prop = kebabToCamel(attr.name);
-      if (dataRef.hasOwnProperty(prop)) {
-        try {
-          this.#override[prop] = JSON.parse(this.getAttribute(attr.name));
-        } catch(err) {
-          console.warn('[IMS] Bad attribute value: ' + attr.name);
-        }
-      }
-    });
+  onResize() { 
+    super.onResize();
+    this.#loadContents(this.srcData, true);
   }
 
   #moveHandler = (e) => {
@@ -386,7 +317,7 @@ class ImsSpinner extends Symbiote {
           this._collectedMovement = this._collectedMovement * this._inertiaFactor;
         }
       }
-    }, this.#cfg.speed / 2);
+    }, this.srcData.speed / 2);
   };
 
   #moveStartHandler = (e) => {
@@ -418,21 +349,6 @@ class ImsSpinner extends Symbiote {
 
   renderCallback() {
 
-    /** @type {HTMLCanvasElement} */
-    this.canvas = this.ref.canvas;
-
-    FullscreenMgr.init();
-    this.sub('fullscreen', (val) => {
-      val ? FullscreenMgr.enable(this) : FullscreenMgr.disable();
-    }, false);
-
-    this.sub('srcDataUrl', async (dataUrl) => {
-      if (!dataUrl) {
-        return;
-      }
-      this.#setConfig(await loadSourceData(dataUrl));
-    });
-
     this.ref.sensor.onmousedown = this.#moveStartHandler;
     this.ref.sensor.addEventListener('touchstart', this.#moveStartHandler);
 
@@ -451,7 +367,7 @@ class ImsSpinner extends Symbiote {
     });
 
     window.addEventListener(CURRENT_PLAY_EVENT_NAME, (e) => {
-      if (this.#cfg.multiplePlay) {
+      if (this.srcData.multiplePlay) {
         return;
       }
       if (e['detail'].uid !== this.#localUid) {
@@ -468,15 +384,11 @@ class ImsSpinner extends Symbiote {
   }
 
   destroyCallback() {
+    super.destroyCallback();
     this.kill();
     this.#imgArray = [];
-    ResizeController.remove(this);
   }
 }
-
-ImsSpinner.bindAttributes({
-  'src-data': 'srcDataUrl',
-});
 
 ImsSpinner.shadowStyles = shadowCss;
 ImsSpinner.template = template;

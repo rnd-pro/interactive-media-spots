@@ -1,19 +1,14 @@
-import Symbiote from '@symbiotejs/symbiote';
+import { ImsBaseClass } from '../../lib/ImsBaseClass.js';
 import { ImsPanoData } from './ImsPanoData.js';
-import { loadSourceData } from '../../lib/loadSourceData.js';
-import { ResizeController } from '../../lib/ResizeController.js';
 import * as THREE from 'three';
 import { template } from './template.js';
 import { styles } from './styles.js';
-import { FullscreenMgr } from '../../lib/FullscreenMgr.js';
 
-export class ImsPano extends Symbiote {
+export class ImsPano extends ImsBaseClass {
+
+  dataClass = ImsPanoData;
 
   init$ = {
-    fullscreen: false,
-    onFs: () => {
-      this.$.fullscreen = !this.$.fullscreen;
-    },
     manual: false,
     onPlayPause: () => {
       this.$.manual = !this.$.manual;
@@ -33,11 +28,7 @@ export class ImsPano extends Symbiote {
   /** @type {THREE.Mesh} */
   #pano;
 
-  /** @type {DOMRect} */
-  #rect;
-
   #userInteracting = false;
-  #manual = false;
   #onPointerDownMouseX = 0;
   #onPointerDownMouseY = 0;
   #lon = 0;
@@ -98,25 +89,20 @@ export class ImsPano extends Symbiote {
     this.#camera.updateProjectionMatrix();
   }
 
-  #onResize = () => {
-    this.#rect = this.getBoundingClientRect();
-    this.#camera.aspect = this.#rect.width / this.#rect.height;
+  onResize = () => {
+    super.onResize();
+    this.#camera.aspect = this.rect.width / this.rect.height;
     this.#camera.updateProjectionMatrix();
-    this.#renderer.setSize(this.#rect.width, this.#rect.height);
+    this.#renderer.setSize(this.rect.width, this.rect.height);
   }
 
-  /**
-   * 
-   * @param {ImsPanoData} srcData 
-   */
-  #init(srcData) {
-    this.#rect = this.getBoundingClientRect();
-    this.#renderer = new THREE.WebGLRenderer({ canvas: this.ref.canvas });
+  init() {
+    this.#renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
     this.#scene = new THREE.Scene();
-    this.#camera = new THREE.PerspectiveCamera( 75, this.#rect.width / this.#rect.height, 1, 1100 );
+    this.#camera = new THREE.PerspectiveCamera( 75, this.rect.width / this.rect.height, 1, 1100 );
     let geometry = new THREE.SphereGeometry( 500, 60, 40 );
     geometry.scale( -1, 1, 1 );
-    let texture = new THREE.TextureLoader().load(srcData.srcList[0]);
+    let texture = new THREE.TextureLoader().load(this.srcData.srcList[0]);
     texture.colorSpace = THREE.SRGBColorSpace;
     let material = new THREE.MeshBasicMaterial({
       map: texture,
@@ -124,8 +110,8 @@ export class ImsPano extends Symbiote {
     this.#pano = new THREE.Mesh(geometry, material);
     this.#scene.add(this.#pano);
     this.#renderer.setPixelRatio(window.devicePixelRatio);
-    this.#renderer.setSize(this.#rect.width, this.#rect.height);
-    if (!srcData.autoplay) {
+    this.#renderer.setSize(this.rect.width, this.rect.height);
+    if (!this.srcData.autoplay) {
       this.$.manual = true;
       this.ref.toolbar.$.playStateIcon = 'play';
     }
@@ -133,34 +119,8 @@ export class ImsPano extends Symbiote {
     this.style.touchAction = 'none';
     this.addEventListener('pointerdown', this.#onPointerDown);
     this.addEventListener('wheel', this.#onDocumentMouseWheel);
-    ResizeController.add(this, this.#onResize);
   }
-
-  /** @type {ImsPanoData} */
-  #srcData;
-  renderCallback() {
-
-    this.sub('srcData', async (srcDataUrl) => {
-      this.#srcData = new ImsPanoData(await loadSourceData(srcDataUrl));
-      this.#init(this.#srcData);
-    });
-
-    FullscreenMgr.init();
-    this.sub('fullscreen', (val) => {
-      if (val) {
-        FullscreenMgr.enable(this);
-      } else {
-        FullscreenMgr.disable();
-      }
-    });
-  }
-
-
 }
-
-ImsPano.bindAttributes({
-  'src-data': 'srcData',
-});
 
 ImsPano.shadowStyles = styles;
 ImsPano.template = template;
