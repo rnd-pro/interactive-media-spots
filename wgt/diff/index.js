@@ -12,6 +12,7 @@ class ImsDiff extends ImsBaseClass {
   #images = [];
 
   init$ = {
+    noFilters: true,
     useFilter: true,
     onFilter: () => {
       this.$.useFilter = !this.$.useFilter;
@@ -45,6 +46,7 @@ class ImsDiff extends ImsBaseClass {
   }
 
   init() {
+    this.$.noFilters = !this.srcData.filters.length;
     this.#loadImages();
   }
 
@@ -92,6 +94,9 @@ class ImsDiff extends ImsBaseClass {
       this.ctx2d.filter = filter1;
     }
     this.ctx2d.drawImage(img1, 0, 0, w, h);
+
+    w = img2.width;
+    h = img2.height;
  
     let imgAspect = w / h;
     let containerAspect = this.rect.width / this.rect.height;
@@ -101,8 +106,20 @@ class ImsDiff extends ImsBaseClass {
     }
     let gap = w * (1 - lk);
 
-    let leftOffsetVal = 56; // TODO: calculate this value from aspect data
+    // Calculate the actual dimensions of the contained image
+    let renderedWidth, renderedHeight;
+    if (containVertical) {
+      renderedHeight = this.rect.height;
+      renderedWidth = renderedHeight * imgAspect;
+    } else {
+      renderedWidth = this.rect.width;
+      renderedHeight = renderedWidth / imgAspect;
+    }
+
+    // Calculate the offset from the container edge
+    let leftOffsetVal = containVertical ? (this.rect.width - renderedWidth) / 2 : 0;
     let leftOffset = containVertical ? leftOffsetVal : 0;
+    
     let sx = w - gap - leftOffset;
     let sy = 0;
     let sWidth = img2.width - sx;

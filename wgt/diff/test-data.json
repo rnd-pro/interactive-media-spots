@@ -1,6 +1,6 @@
 {
   "imsType": "diff",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "dispatchEvents": true,
   "baseUrl": "https://rnd-pro.com/idn/",
   "variants": [
@@ -15,8 +15,8 @@
   "startPosition": 50,
   
   "cdnIdList": [
-    "e47b0750-db87-4fc0-c120-f4dfd53f0500",
-    "e47b0750-db87-4fc0-c120-f4dfd53f0500"
+    "230cbd86-cc22-4e66-56be-8fcf6440f300",
+    "617406e6-791b-4b24-8ca1-eb050f481e00"
   ],
   "filters": [
     "grayscale(100%)",

@@ -32,7 +32,7 @@ export const DIFF_STYLES = css`
       bottom: 0;
       left: 50%;
       width: 1px;
-      background-color: var(--color-slider, rgba(0, 0, 0, 0.5));
+      background-color: var(--color-slider, rgba(0, 0, 0, 0));
       pointer-events: none;
     }
   }

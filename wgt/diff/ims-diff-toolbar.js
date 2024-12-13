@@ -3,12 +3,16 @@ export { ImsButton } from '../../lib/ims-button.js';
 
 export class ImsDiffToolbar extends Symbiote {
   init$ = {
+    filterStateIcon: 'blur',
     fsStateIcon: 'fs_on',
   }
 
   initCallback() {
     this.sub('^fullscreen', (val) => {
       this.$.fsStateIcon = val ? 'fs_off' : 'fs_on';
+    });
+    this.sub('^useFilter', (val) => {
+      this.$.filterStateIcon = val ? 'blur_off' : 'blur';
     });
   }
 }
@@ -37,7 +41,11 @@ ims-diff-toolbar {
 `;
 
 ImsDiffToolbar.template = html`
-<ims-button ${{onclick: '^onFilter'}} icon="blur"></ims-button>
+<ims-button ${{
+  onclick: '^onFilter',
+  '@icon': 'filterStateIcon',
+  '@hidden': '^noFilters',
+}}></ims-button>
 <ims-button ${{onclick: '^onFs', '@icon': 'fsStateIcon'}}></ims-button>
 `;
 
