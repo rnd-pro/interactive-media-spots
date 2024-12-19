@@ -2,7 +2,6 @@ import { ImsBaseClass } from '../../lib/ImsBaseClass.js';
 import { DIFF_STYLES } from './styles.js';
 import { DIFF_TPL } from './template.js';
 import { ImsDiffData } from './ImsDiffData.js';
-import { getVariantFit } from '../../lib/getVariantFit.js';
 
 class ImsDiff extends ImsBaseClass {
 
@@ -50,31 +49,32 @@ class ImsDiff extends ImsBaseClass {
     this.#loadImages();
   }
 
-  #mMoveHandler(e) {
-    let left = e.clientX - this.rect.left;
-    this.ref.slider.style.left = `${left}px`;
-    let k = left / this.rect.width;
+  #mMoveHandler = (e) => {
+    let canvRect = this.canvas.getBoundingClientRect();
+    let left = e.clientX - canvRect.left;
+    this.ref.slider.style.left = `${left + canvRect.left}px`;
+    let k = left / canvRect.width;
     // console.log(k);
     this.#draw(0, k);
   }
 
-  #mUpHandler() {
-    this.removeEventListener('mousemove', this.#mMoveHandler);
+  #mUpHandler = () => {
+    this.canvas.removeEventListener('mousemove', this.#mMoveHandler);
   }
 
-  #mDownHandler() {
-    this.addEventListener('mousemove', this.#mMoveHandler);
-    this.addEventListener('mouseup', this.#mUpHandler);
+  #mDownHandler = () => {
+    this.canvas.addEventListener('mousemove', this.#mMoveHandler);
+    this.canvas.addEventListener('mouseup', this.#mUpHandler);
   }
 
-  #mOutHandler() {
-    this.removeEventListener('mousemove', this.#mMoveHandler);
+  #mOutHandler = () => {
+    this.canvas.removeEventListener('mousemove', this.#mMoveHandler);
   }
 
   #start() {
     this.#draw(0, 0.5);
-    this.addEventListener('mousedown', this.#mDownHandler);
-    this.addEventListener('mouseout', this.#mOutHandler);
+    this.canvas.addEventListener('mousedown', this.#mDownHandler);
+    this.canvas.addEventListener('mouseout', this.#mOutHandler);
   }
 
   /**
@@ -99,7 +99,7 @@ class ImsDiff extends ImsBaseClass {
     h = img2.height;
  
     let imgAspect = w / h;
-    let containerAspect = this.rect.width / this.rect.height;
+    let containerAspect = this.canvas.width / this.canvas.height;
     let containVertical = imgAspect < containerAspect;
     if (containVertical) {
       w = w * containerAspect / imgAspect;
@@ -109,15 +109,15 @@ class ImsDiff extends ImsBaseClass {
     // Calculate the actual dimensions of the contained image
     let renderedWidth, renderedHeight;
     if (containVertical) {
-      renderedHeight = this.rect.height;
+      renderedHeight = this.canvas.height;
       renderedWidth = renderedHeight * imgAspect;
     } else {
-      renderedWidth = this.rect.width;
+      renderedWidth = this.canvas.width;
       renderedHeight = renderedWidth / imgAspect;
     }
 
     // Calculate the offset from the container edge
-    let leftOffsetVal = containVertical ? (this.rect.width - renderedWidth) / 2 : 0;
+    let leftOffsetVal = containVertical ? (this.canvas.width - renderedWidth) / 2 : 0;
     let leftOffset = containVertical ? leftOffsetVal : 0;
     
     let sx = w - gap - leftOffset;

@@ -17,8 +17,6 @@ export const DIFF_STYLES = css`
 
     canvas {
       height: 100%;
-      width: 100%;
-      object-fit: contain;
       cursor: grab;
   
       &:active {
@@ -32,7 +30,7 @@ export const DIFF_STYLES = css`
       bottom: 0;
       left: 50%;
       width: 1px;
-      background-color: var(--color-slider, rgba(0, 0, 0, 0));
+      background-color: var(--color-slider, rgba(0, 0, 0, .2));
       pointer-events: none;
     }
   }

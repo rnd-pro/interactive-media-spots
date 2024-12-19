@@ -1,25 +1,24 @@
 {
   "imsType": "diff",
-  "version": "0.0.19",
-  "dispatchEvents": true,
+  "version": "0.0.20",
+  "hideUi": false,
   "baseUrl": "https://rnd-pro.com/idn/",
   "variants": [
+    "120",
     "320",
     "640",
     "860",
     "1024",
     "1200",
-    "2048"
+    "2048",
+    "4096"
   ],
-  "maxVariantName": "max",
+  "dispatchEvents": false,
   "startPosition": 50,
-  
+  "maxVariantName": "",
   "cdnIdList": [
-    "230cbd86-cc22-4e66-56be-8fcf6440f300",
-    "617406e6-791b-4b24-8ca1-eb050f481e00"
+    "352cb933-4604-41dc-957a-2c02b2305000",
+    "0af30700-2327-4b33-dd29-2f56c124b900"
   ],
-  "filters": [
-    "grayscale(100%)",
-    "invert(100%)"
-  ]
+  "filters": []
 }
