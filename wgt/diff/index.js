@@ -50,10 +50,9 @@ class ImsDiff extends ImsBaseClass {
   }
 
   #mMoveHandler = (e) => {
-    let canvRect = this.canvas.getBoundingClientRect();
-    let left = e.clientX - canvRect.left;
-    this.ref.slider.style.left = `${left + canvRect.left}px`;
-    let k = left / canvRect.width;
+    let left = e.clientX - this.cnvRect.left;
+    this.ref.slider.style.left = `${left + this.canvas.offsetLeft}px`;
+    let k = left / this.cnvRect.width;
     // console.log(k);
     this.#draw(0, k);
   }
@@ -63,6 +62,7 @@ class ImsDiff extends ImsBaseClass {
   }
 
   #mDownHandler = () => {
+    this.cnvRect = this.canvas.getBoundingClientRect();
     this.canvas.addEventListener('mousemove', this.#mMoveHandler);
     this.canvas.addEventListener('mouseup', this.#mUpHandler);
   }
