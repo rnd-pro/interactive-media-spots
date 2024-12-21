@@ -50,6 +50,10 @@ class ImsDiff extends ImsBaseClass {
   }
 
   #mMoveHandler = (e) => {
+    e.preventDefault();
+    if (e.type === 'touchmove') {
+      e = e.touches[0];
+    }
     let left = e.clientX - this.cnvRect.left;
     this.ref.slider.style.left = `${left + this.canvas.offsetLeft}px`;
     let k = left / this.cnvRect.width;
@@ -59,22 +63,28 @@ class ImsDiff extends ImsBaseClass {
 
   #mUpHandler = () => {
     this.canvas.removeEventListener('mousemove', this.#mMoveHandler);
+    this.canvas.removeEventListener('touchmove', this.#mMoveHandler);
   }
 
   #mDownHandler = () => {
     this.cnvRect = this.canvas.getBoundingClientRect();
     this.canvas.addEventListener('mousemove', this.#mMoveHandler);
     this.canvas.addEventListener('mouseup', this.#mUpHandler);
+    this.canvas.addEventListener('touchmove', this.#mMoveHandler);
+    this.canvas.addEventListener('touchend', this.#mUpHandler);
   }
 
   #mOutHandler = () => {
     this.canvas.removeEventListener('mousemove', this.#mMoveHandler);
+    this.canvas.removeEventListener('touchmove', this.#mMoveHandler);
   }
 
   #start() {
     this.#draw(0, 0.5);
     this.canvas.addEventListener('mousedown', this.#mDownHandler);
     this.canvas.addEventListener('mouseout', this.#mOutHandler);
+    this.canvas.addEventListener('touchstart', this.#mDownHandler);
+    this.canvas.addEventListener('touchend', this.#mUpHandler);
   }
 
   /**
@@ -134,6 +144,15 @@ class ImsDiff extends ImsBaseClass {
       this.ctx2d.filter = filter2;
     }
     this.ctx2d.drawImage(img2, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+  }
+
+  destroyCallback() {
+    this.canvas.removeEventListener('mousedown', this.#mDownHandler);
+    this.canvas.removeEventListener('mouseout', this.#mOutHandler);
+    this.canvas.removeEventListener('touchstart', this.#mDownHandler);
+    this.canvas.removeEventListener('touchend', this.#mUpHandler);
+    this.canvas.removeEventListener('touchmove', this.#mMoveHandler);
+    this.canvas.removeEventListener('touchend', this.#mUpHandler);
   }
 
 }

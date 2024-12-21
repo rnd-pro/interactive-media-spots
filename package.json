@@ -1,6 +1,6 @@
 {
   "name": "interactive-media-spots",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Interactive Media Spots",
   "type": "module",
   "sideEffects": false,

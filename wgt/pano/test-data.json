@@ -1,7 +1,8 @@
 {
   "imsType": "pano",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "autoplay": false,
+  "fov": 90,
   "baseUrl": "https://rnd-pro.com/idn/",
   "variants": [
     "120",
@@ -12,8 +13,9 @@
     "1200",
     "2048"
   ],
+  "maxVariantName": "max",
   "cdnIdList": [
-    "eee93302-8e14-4c6e-c44d-c714ad347900"
+    "bc48905f-04c8-423e-3a6b-f727f5285600"
   ],
   "srcList": []
 }

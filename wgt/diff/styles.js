@@ -16,9 +16,10 @@ export const DIFF_STYLES = css`
     box-sizing: border-box;
 
     canvas {
-      height: 100%;
+      max-height: 100%;
+      max-width: 100%;
       cursor: grab;
-  
+
       &:active {
         cursor: grabbing;
       }

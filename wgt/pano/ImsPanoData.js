@@ -11,7 +11,8 @@ export class ImsPanoData {
   autoplay = false;
   dispatchEvents = false;
   startPosition = 50;
-  maxVariantName = '';
+  fov = 90;
+  maxVariantName = 'max';
   /** @type {String[]} */
   cdnIdList = [];
   /** @type {String[]} */

@@ -49,7 +49,7 @@ export class ImsPano extends ImsBaseClass {
     let y = 500 * Math.cos(this.#phi);
     let z = 500 * Math.sin(this.#phi) * Math.sin(this.#theta);
 
-    this.#camera.lookAt( x, y, z );
+    this.#camera.lookAt(x, y, z);
     this.#renderer.render(this.#scene, this.#camera);
   }
 
@@ -84,24 +84,32 @@ export class ImsPano extends ImsBaseClass {
   }
 
   #onDocumentMouseWheel = (e) => {
+    if (!this.$.fullscreen) {
+      return;
+    }
+    e.preventDefault();
     let fov = this.#camera.fov + e.deltaY * 0.05;
-    this.#camera.fov = THREE.MathUtils.clamp(fov, 10, 75);
+    this.#camera.fov = THREE.MathUtils.clamp(fov, 10, this.srcData.fov || 80);
     this.#camera.updateProjectionMatrix();
   }
 
   onResize = () => {
     super.onResize();
     this.#camera.aspect = this.rect.width / this.rect.height;
+    this.#camera.fov = this.srcData.fov || 80;
     this.#camera.updateProjectionMatrix();
     this.#renderer.setSize(this.rect.width, this.rect.height);
   }
 
   init() {
-    this.#renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
+    this.#renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+    });
     this.#scene = new THREE.Scene();
-    this.#camera = new THREE.PerspectiveCamera( 75, this.rect.width / this.rect.height, 1, 1100 );
-    let geometry = new THREE.SphereGeometry( 500, 60, 40 );
-    geometry.scale( -1, 1, 1 );
+    this.#camera = new THREE.PerspectiveCamera(this.srcData.fov || 80, this.rect.width / this.rect.height, 1, 1100 );
+    let geometry = new THREE.SphereGeometry(500, 60, 40);
+    geometry.scale(-1, 1, 1);
+    geometry.rotateY(THREE.MathUtils.degToRad(180));
     let texture = new THREE.TextureLoader().load(this.srcData.srcList[0]);
     texture.colorSpace = THREE.SRGBColorSpace;
     let material = new THREE.MeshBasicMaterial({
@@ -111,7 +119,9 @@ export class ImsPano extends ImsBaseClass {
     this.#scene.add(this.#pano);
     this.#renderer.setPixelRatio(window.devicePixelRatio);
     this.#renderer.setSize(this.rect.width, this.rect.height);
-    if (!this.srcData.autoplay) {
+    if (this.srcData.autoplay) {
+      this.ref.toolbar.$.playStateIcon = 'manual';
+    } else {
       this.$.manual = true;
       this.ref.toolbar.$.playStateIcon = 'play';
     }
