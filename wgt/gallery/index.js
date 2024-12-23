@@ -36,6 +36,9 @@ export class ImsGallery extends ImsBaseClass {
     window.requestAnimationFrame(() => {
       this.ctx2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
       let img = this.#images[this.$.current];
+      if (!img.complete) {
+        return;
+      }
       this.canvas.width = img.width;
       this.canvas.height = img.height;
       this.ctx2d.drawImage(img, 0, 0, img.width, img.height);

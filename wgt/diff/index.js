@@ -10,15 +10,15 @@ class ImsDiff extends ImsBaseClass {
   /** @type {HTMLImageElement[]} */
   #images = [];
 
-  init$ = {
-    noFilters: true,
-    useFilter: true,
-    onFilter: () => {
-      this.$.useFilter = !this.$.useFilter;
-      this.#draw(0, 0.5);
-      this.ref.slider.style.left = '50%';
-    },
-  }
+  // init$ = {
+    // noFilters: true,
+    // useFilter: true,
+    // onFilter: () => {
+    //   this.$.useFilter = !this.$.useFilter;
+    //   this.#draw(0, 0.5);
+    //   this.ref.slider.style.left = '50%';
+    // },
+  // }
 
   onResize() {
     super.onResize();
@@ -45,7 +45,7 @@ class ImsDiff extends ImsBaseClass {
   }
 
   init() {
-    this.$.noFilters = !this.srcData.filters.length;
+    // this.$.noFilters = !this.srcData.filters.length;
     this.#loadImages();
   }
 
@@ -98,11 +98,11 @@ class ImsDiff extends ImsBaseClass {
     let h = img1.height;
     this.canvas.width = w;
     this.canvas.height = h;
-    let filter1 = this.srcData.filters?.[idx];
-    let filter2 = this.srcData.filters?.[idx + 1];
-    if (this.$.useFilter && filter1) {
-      this.ctx2d.filter = filter1;
-    }
+    // let filter1 = this.srcData.filters?.[idx];
+    // let filter2 = this.srcData.filters?.[idx + 1];
+    // if (this.$.useFilter && filter1) {
+    //   this.ctx2d.filter = filter1;
+    // }
     this.ctx2d.drawImage(img1, 0, 0, w, h);
 
     w = img2.width;
@@ -140,9 +140,9 @@ class ImsDiff extends ImsBaseClass {
     let dHeight = h;
 
     this.ctx2d.clearRect(sx, sy, sWidth, sHeight);
-    if (this.$.useFilter && filter2) {
-      this.ctx2d.filter = filter2;
-    }
+    // if (this.$.useFilter && filter2) {
+    //   this.ctx2d.filter = filter2;
+    // }
     this.ctx2d.drawImage(img2, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
   }
 

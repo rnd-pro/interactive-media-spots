@@ -94,11 +94,14 @@ export class ImsPano extends ImsBaseClass {
   }
 
   onResize = () => {
+    let rect = this.getBoundingClientRect();
+    this.canvas.width = rect.width;
+    this.canvas.height = rect.height;
     super.onResize();
-    this.#camera.aspect = this.rect.width / this.rect.height;
+    this.#renderer.setSize(rect.width, rect.height);
+    this.#camera.aspect = rect.width / rect.height;
     this.#camera.fov = this.srcData.fov || 80;
     this.#camera.updateProjectionMatrix();
-    this.#renderer.setSize(this.rect.width, this.rect.height);
   }
 
   init() {

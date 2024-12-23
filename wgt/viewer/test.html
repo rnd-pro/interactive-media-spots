@@ -1,7 +1,8 @@
 <script type="importmap">
   {
     "imports": {
-      "@symbiotejs/symbiote": "https://cdn.jsdelivr.net/npm/@symbiotejs/symbiote@2.3.2/+esm"
+      "@symbiotejs/symbiote": "https://cdn.jsdelivr.net/npm/@symbiotejs/symbiote@2.3.2/+esm",
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/+esm"
     }
   }
 </script>
@@ -9,21 +10,24 @@
 <script src="./index.js" type="module"></script>
 
 <style>
-  html, body {
-    padding: 0;
-    margin: 0;
-    background-color: #ccc;
-  }
-  ims-spinner {
-    max-width: 860px;
-    max-height: 570px;
-    border: 1px dashed rgba(0, 0, 0, .2);
-    background-color: #ccc;
-
-    [inner] {
-      padding: 20px;
+  ims-viewer {
+    > * {
+      max-width: 640px;
+      max-height: 400px;
+      border: 1px dashed rgba(0, 0, 0, .2);
+      background-color: #ccc;
     }
   }
 </style>
 
-<ims-viewer src-data="../diff/test-data.json" version="0.0.22"></ims-viewer>
+<h2>Diff</h2>
+<ims-viewer src-data="../diff/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>
+
+<h2>Spinner</h2>
+<ims-viewer src-data="../spinner/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>
+
+<h2>Gallery</h2>
+<ims-viewer src-data="../gallery/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>
+
+<h2>Pano</h2>
+<ims-viewer src-data="../pano/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>

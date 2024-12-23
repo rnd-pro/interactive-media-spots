@@ -65,7 +65,7 @@ class ImsSpinner extends ImsBaseClass {
 
   /**
    * 
-   * @param {ImsSpinnerData} cfg 
+   * @param {import('../../lib/ImsBaseClass.js').ImsData} cfg 
    * @param {Boolean} force 
    * @returns 
    */
@@ -113,6 +113,9 @@ class ImsSpinner extends ImsBaseClass {
    * @param {HTMLImageElement} img 
    */
   drawFrame(img) {
+    if (!img.complete) {
+      return;
+    }
     this.clear();
     this.canvas.height = img.height;
     this.canvas.width = img.width;

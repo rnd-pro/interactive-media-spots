@@ -15,6 +15,8 @@ export class ImsDiffData {
   /** @type {String[]} */
   cdnIdList = [];
   /** @type {String[]} */
+  srcList = [];
+  /** @type {String[]} */
   filters = [];
 
   /**

@@ -1,6 +1,6 @@
 {
   "imsType": "pano",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "autoplay": false,
   "fov": 90,
   "baseUrl": "https://rnd-pro.com/idn/",

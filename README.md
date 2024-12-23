@@ -107,7 +107,6 @@ All our widgets support:
 - Adaptive DPI support
 - Full-screen display mode
 - Mobile device compatibility
-- Image filters
 - Alpha channel support for transparent backgrounds and background settings
 - Easy universal integration using a custom HTML tag, without the need for JavaScript
 - On-demand dynamic loading of necessary dependencies
