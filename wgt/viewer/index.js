@@ -18,6 +18,15 @@ export class ImsViewer extends Symbiote {
         .replaceAll('{{imsType}}', srcData.imsType);
       await import(urlStr);
       let imsTypeEl = document.createElement(`ims-${srcData.imsType}`);
+      let elAttributes = [...this.attributes];
+      let castAttr = elAttributes.find(attr => attr.name === 'cast-next');
+      if (castAttr) {
+        let castAttrIndex = elAttributes.indexOf(castAttr);
+        elAttributes = elAttributes.slice(castAttrIndex + 1, elAttributes.length);
+        elAttributes.forEach(attr => {
+          imsTypeEl.setAttribute(attr.name, attr.value);
+        });
+      }
       let blob = new Blob([JSON.stringify(srcData)], {  
         type: 'application/json',
       });

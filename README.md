@@ -21,6 +21,7 @@ Configuration example:
 ```json
 {
   "imsType": "diff",
+  "version": "<VERSION>",
   "baseUrl": "https://your-cdn.com/",
   "variants": ["320", "640", "860", "1024"],
   "cdnIdList": ["image1-id", "image2-id"],
@@ -46,6 +47,7 @@ Configuration example:
 ```json
 {
   "imsType": "pano",
+  "version": "<VERSION>",
   "autoplay": false,
   "baseUrl": "https://your-cdn.com/",
   "variants": ["640", "1024", "2048"],
@@ -64,6 +66,7 @@ Configuration example:
 ```json
 {
   "imsType": "spinner",
+  "version": "<VERSION>",
   "autoplay": true,
   "speed": 50,
   "showCover": true,
