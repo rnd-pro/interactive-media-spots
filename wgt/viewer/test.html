@@ -7,15 +7,20 @@
   }
 </script>
  
+<script>
+  window['__FULLSCREEN_API_UNSUPPORTED_TEST__'] = true;
+</script>
 <script src="./index.js" type="module"></script>
 
 <style>
+  ims-diff, ims-spinner, ims-gallery, ims-pano, ims-video {
+    background-color: #ccc;
+  }
   ims-viewer {
     > * {
       width: 640px;
       height: 400px;
       border: 1px dashed rgba(0, 0, 0, .2);
-      background-color: #ccc;
     }
   }
 </style>
