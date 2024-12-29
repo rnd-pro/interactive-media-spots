@@ -12,8 +12,8 @@
 <style>
   ims-viewer {
     > * {
-      max-width: 640px;
-      max-height: 400px;
+      width: 640px;
+      height: 400px;
       border: 1px dashed rgba(0, 0, 0, .2);
       background-color: #ccc;
     }
@@ -31,3 +31,6 @@
 
 <h2>Pano</h2>
 <ims-viewer src-data="../pano/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>
+
+<h2>Video</h2>
+<ims-viewer src-data="../video/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>

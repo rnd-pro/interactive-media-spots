@@ -1,0 +1,39 @@
+{
+  "imsType": "video",
+  "version": "0.1.0",
+  "hideUi": false,
+
+  "autoplay": false,
+
+  "hlsSrc": "https://customer-g2o9veyc86r2lb8z.cloudflarestream.com/05b662f4012a3194fc573a9e5ccb7909/manifest/video.m3u8",
+  "sources": [
+    {
+      "label": "HQ",
+      "src": "https://customer-g2o9veyc86r2lb8z.cloudflarestream.com/05b662f4012a3194fc573a9e5ccb7909/downloads/default.mp4",
+      "type": "video/mp4"
+    },
+    {
+      "label": "MQ",
+      "src": "https://customer-g2o9veyc86r2lb8z.cloudflarestream.com/05b662f4012a3194fc573a9e5ccb7909/downloads/default.mp4",
+      "type": "video/mp4"
+    },
+    {
+      "label": "LQ",
+      "src": "https://customer-g2o9veyc86r2lb8z.cloudflarestream.com/05b662f4012a3194fc573a9e5ccb7909/downloads/default.mp4",
+      "type": "video/mp4"
+    }
+  ],
+  "tracks": [
+    {
+      "kind": "subtitles",
+      "src": "./test-track.vtt",
+      "srclang": "en",
+      "label": "EN",
+      "default": true
+    }
+  ],
+
+  "coverUrl": "https://customer-g2o9veyc86r2lb8z.cloudflarestream.com/05b662f4012a3194fc573a9e5ccb7909/thumbnails/thumbnail.jpg",
+  "showCover": true,
+  "dispatchEvents": false
+}
