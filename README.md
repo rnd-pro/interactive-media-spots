@@ -13,7 +13,6 @@ A lightweight collection of web components for interactive media visualization.
 
 ### ims-diff
 An image comparison widget with slider control. Perfect for before/after visualizations.
-
 ```html
 <ims-diff src-data="./diff-data.json"></ims-diff>
 ```
@@ -73,6 +72,29 @@ Configuration example:
   "cdnIdList": ["frame1-id", "frame2-id", "..."]
 }
 ```
+
+### ims-video
+
+A video player component with HLS support, captions, and customizable controls.
+
+```html
+<ims-video src-data="./spinner-data.json"></ims-video>
+```
+
+Configuration example:
+```json
+{
+  "imsType": "video",
+  "version": "<VERSION>",
+  "autoplay": true,
+  "coverUrl": "<COVER_IMAGE_URL>",
+  "showCover": true,
+  "hlsSrc": "<HLS_SOURCE_PATH>",
+  "sources": "<SOURCE_DESCRIPTIONS>",
+  "tracks": []
+}
+```
+
 
 ### ims-viewer
 Universal component, that loads dependencies dynamically using CDN with the certain application version support.
