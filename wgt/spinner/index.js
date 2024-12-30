@@ -131,16 +131,14 @@ class ImsSpinner extends ImsBaseClass {
 
     /** @type {Number} */
     this.#currentFrame = num;
-    let img = this.#imgArray[ num ];
-    if (img) {
-      this.#ctx2d.filter = 'none';
+    let img = this.#imgArray[num];
+    if (img && img.complete) {
       this.removeAttribute('loading');
       this.drawFrame(img);
       this._lastLoadedFrame = img;
     } else {
       this.setAttribute('loading', '');
       if (this._lastLoadedFrame) {
-        this.#ctx2d.filter = 'blur(10px)';
         this.drawFrame(this._lastLoadedFrame);
       }
     }
@@ -158,7 +156,6 @@ class ImsSpinner extends ImsBaseClass {
     let previewImage = document.createElement('img');
     previewImage.src = src;
     previewImage.onload = () => {
-      this.#ctx2d.filter = 'none';
       this.drawFrame(previewImage);
     };
   }
@@ -170,9 +167,6 @@ class ImsSpinner extends ImsBaseClass {
     this.$.progress = 0;
     this.removeAttribute('active');
     this.#drawPreviewImage();
-    window.setTimeout(() => {
-      this.#ctx2d && (this.#ctx2d.filter = 'none');
-    }, 300);
   }
 
   /** @type {Boolean} */
@@ -220,14 +214,13 @@ class ImsSpinner extends ImsBaseClass {
     }, this.srcData.speed);
   }
 
-  togglePlay(e) {
-    if (e) {
-      e.preventDefault();
-    }
+  togglePlay() {
     if (this.#playStatusFlag) {
       this.#pause();
+      this.removeAttribute('active');
     } else {
       this.#play();
+      this.setAttribute('active', '');
     }
   }
 
@@ -358,8 +351,8 @@ class ImsSpinner extends ImsBaseClass {
 
     window.onkeyup = (e) => {
       if (e.keyCode === 32) {
-        this.togglePlay(e);
-        this.setAttribute('active', '');
+        e.preventDefault();
+        this.togglePlay();
       }
     };
 

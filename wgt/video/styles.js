@@ -4,6 +4,8 @@ export const styles = css`
 :host {
   display: inline-grid;
   grid-template-rows: 1fr min-content;
+  width: 100%;
+  height: 100%;
   max-height: 100vh;
   overflow: hidden;
   font-family: monospace;
@@ -11,11 +13,6 @@ export const styles = css`
   
   [hidden] {
     display: none !important;
-  }
-
-  lr-range[disabled] {
-    opacity: 0.4;
-    pointer-events: none;
   }
 
   .video-wrapper {
@@ -32,7 +29,7 @@ export const styles = css`
     background-color: #000;
   }
 
-  &[playback] .toolbar {
+  &[playback] ims-video-toolbar {
     opacity: 0.2;
   }
 
