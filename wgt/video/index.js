@@ -2,7 +2,7 @@ import ImsBaseClass from '../../lib/ImsBaseClass.js';
 import { template } from './template.js';
 import { styles } from './styles.js';
 import { ImsVideoData } from './ImsVideoData.js';
-import 'https://cdn.jsdelivr.net/npm/hls.js@1';
+import 'hls.js';
 
 /** @enum {String} */
 const ICO_MAP = {
@@ -134,7 +134,7 @@ export class ImsVideo extends ImsBaseClass {
       this.#video.poster = this.srcData.coverUrl;
     }
     if (this.srcData.hlsSrc) {
-      // @ts-ignore
+      // @ts-ignore | Global Hls object is added by hls.js
       let hls = new Hls();
       hls.loadSource(this.srcData.hlsSrc);
       hls.attachMedia(this.#video);
