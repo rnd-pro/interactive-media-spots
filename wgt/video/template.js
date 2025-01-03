@@ -11,5 +11,11 @@ export const template = html`
     crossorigin="anonymous">
   </video>
 </div>
+<div 
+  class="progress"
+  ref="progress"
+  ${{onclick: 'progressClicked'}}>
+  <div class="bar" ${{'style.width': 'progressCssWidth'}}></div>
+</div>
 <ims-video-toolbar></ims-video-toolbar>
 `;

@@ -1,0 +1,39 @@
+{
+  "imsType": "video",
+  "version": "0.1.0",
+  "hideUi": false,
+
+  "autoplay": false,
+
+  "hlsSrc": "",
+  "sources": [
+    {
+      "label": "HQ",
+      "src": "https://ucarecdn.com/d52902bb-c7d3-4e00-9f80-ed489dda9a3f/",
+      "type": "video/mp4"
+    },
+    {
+      "label": "MQ",
+      "src": "https://ucarecdn.com/d52902bb-c7d3-4e00-9f80-ed489dda9a3f/",
+      "type": "video/mp4"
+    },
+    {
+      "label": "LQ",
+      "src": "https://ucarecdn.com/d52902bb-c7d3-4e00-9f80-ed489dda9a3f/",
+      "type": "video/mp4"
+    }
+  ],
+  "tracks": [
+    {
+      "kind": "subtitles",
+      "src": "../video/test-track.vtt",
+      "srclang": "en",
+      "label": "EN",
+      "default": true
+    }
+  ],
+
+  "coverUrl": "",
+  "showCover": true,
+  "dispatchEvents": false
+}

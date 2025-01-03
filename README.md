@@ -2,7 +2,7 @@
 
 A lightweight collection of web components for interactive media visualization.
 
-## Components
+## Widgets
 
 ### ims-diff
 An image comparison widget with slider control. Perfect for before/after visualizations.
@@ -101,7 +101,7 @@ Universal component, that loads dependencies dynamically using CDN with the cert
 
 ## Installation & Usage
 
-1. Include the necessary common modules via CDN or the files in your project structure:
+1. Include the necessary common dependencies via CDN or the files in your project structure:
 ```html
 <script type="importmap">
   {
@@ -150,6 +150,7 @@ All our widgets support:
 - Mobile device compatibility
 - Alpha channel support for transparent backgrounds and background settings
 - Easy universal integration using a custom HTML tag, without the need for JavaScript
+- Seamless integration with all modern frameworks: React, Vue, Angular, etc.
 - On-demand dynamic loading of necessary dependencies
 - Simple and effective version management for widgets and required data
 - Direct data encoding within images for use with specialized CDNs
@@ -162,6 +163,7 @@ All our widgets support:
 - Watermarking for copyright protection (coming soon)
 - Interactive hot spots for linking to other content, enabling the creation of more intricate and complex hypermedia stories (coming soon)
 - Audio accompaniment (coming soon)
+- 3D model viewer (coming soon)
 
 > IMS is supported by all current versions of popular browsers.
 
@@ -171,4 +173,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT
+MIT © [rnd-pro.com](https://rnd-pro.com)

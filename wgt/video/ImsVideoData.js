@@ -8,6 +8,7 @@ export class ImsVideoData {
   autoplay = false;
 
   hlsSrc = '';
+  hlsSubtitles = true;
   sources = [];
   tracks = [];
   coverUrl = '';

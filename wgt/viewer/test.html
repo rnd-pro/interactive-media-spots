@@ -14,14 +14,14 @@
 <script src="./index.js" type="module"></script>
 
 <style>
-  ims-diff, ims-spinner, ims-gallery, ims-pano, ims-video {
+  ims-diff, ims-spinner, ims-gallery, ims-pano {
     background-color: #ccc;
+    border: 1px dashed rgba(0, 0, 0, .2);
   }
   ims-viewer {
     > * {
       width: 640px;
       height: 400px;
-      border: 1px dashed rgba(0, 0, 0, .2);
     }
   }
 </style>
@@ -30,7 +30,11 @@
 <ims-viewer src-data="../diff/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>
 
 <h2>Spinner</h2>
-<ims-viewer src-data="../spinner/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>
+<ims-viewer 
+  src-data="../spinner/test-data.json" 
+  url-template="../{{imsType}}/index.js"
+  cast-next
+  autoplay="true"></ims-viewer>
 
 <h2>Gallery</h2>
 <ims-viewer src-data="../gallery/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>
@@ -38,9 +42,12 @@
 <h2>Pano</h2>
 <ims-viewer src-data="../pano/test-data.json" url-template="../{{imsType}}/index.js"></ims-viewer>
 
-<h2>Video</h2>
+<h2>Video (HLS)</h2>
 <ims-viewer 
-  src-data="../video/test-data.json" 
-  url-template="../{{imsType}}/index.js" 
-  cast-next
-  version="0.0.23"></ims-viewer>
+  src-data="../video/test-hls.json" 
+  url-template="../{{imsType}}/index.js"></ims-viewer>
+
+<h2>Video (MP4)</h2>
+<ims-viewer 
+  src-data="../video/test-mp4.json" 
+  url-template="../{{imsType}}/index.js"></ims-viewer>

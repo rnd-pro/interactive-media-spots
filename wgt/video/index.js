@@ -10,8 +10,8 @@ const ICO_MAP = {
   PAUSE: 'pause',
   VOL_ON: 'unmute',
   VOL_OFF: 'mute',
-  CAP_ON: 'captions',
-  CAP_OFF: 'captions-off',
+  CAP_ON: 'captions_on',
+  CAP_OFF: 'captions_off',
 };
 
 export class ImsVideo extends ImsBaseClass {
@@ -29,11 +29,11 @@ export class ImsVideo extends ImsBaseClass {
   toggleCaptions() {
     if (this.$.capIcon === ICO_MAP.CAP_OFF) {
       this.$.capIcon = ICO_MAP.CAP_ON;
-      this.#video.textTracks[0].mode = 'showing';
+      this.#video?.textTracks.length && (this.#video.textTracks[0].mode = 'showing');
       window.localStorage.setItem(ImsVideo.is + ':captions', '1');
     } else {
       this.$.capIcon = ICO_MAP.CAP_OFF;
-      this.#video.textTracks[0].mode = 'hidden';
+      this.#video?.textTracks.length && (this.#video.textTracks[0].mode = 'hidden');
       window.localStorage.removeItem(ImsVideo.is + ':captions');
     }
   }
@@ -64,7 +64,7 @@ export class ImsVideo extends ImsBaseClass {
     totalTime: '00:00',
     currentTime: '00:00',
     progressCssWidth: '0',
-    hasSubtitles: false,
+    noSubtitles: true,
     volumeDisabled: false,
     volumeValue: 0,
     onPP: () => {
@@ -138,14 +138,24 @@ export class ImsVideo extends ImsBaseClass {
       let hls = new Hls();
       hls.loadSource(this.srcData.hlsSrc);
       hls.attachMedia(this.#video);
+      this.$.noSubtitles = !this.srcData.hlsSubtitles;
     } else {
       let html = '';
       this.srcData.sources.forEach((srcDesc) => {
         html += /*html*/ `<source ${this.#desc2attrs(srcDesc)}>`;
       });
+      
+      if (this.srcData?.tracks?.length) {
+        this.$.noSubtitles = false;
+        this.srcData.tracks.forEach((trackDesc) => {
+          html += /*html*/ `<track ${this.#desc2attrs(trackDesc)}>`;
+        });
+      }
+
       this.#video.innerHTML += html;
       this.#initTracks();
     }
+
     if (!this.srcData.hideUi) {
       this.setAttribute('controls', '');
     }
@@ -176,6 +186,11 @@ export class ImsVideo extends ImsBaseClass {
     this.#video.addEventListener('loadedmetadata', (e) => {
       this.$.currentTime = this.#timeFmt(this.#video.currentTime);
       this.$.totalTime = this.#timeFmt(this.#video.duration);
+      if (!this.#video?.textTracks.length) return;
+      Array.from(this.#video.textTracks[0].cues).forEach((cue) => {
+        // @ts-ignore
+        cue.line = -3;
+      });
     });
 
     this.#video.addEventListener('timeupdate', (e) => {

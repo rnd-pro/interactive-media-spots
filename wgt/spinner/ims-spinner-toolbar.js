@@ -26,8 +26,6 @@ ims-spinner-toolbar {
   color: #fff;
   padding: 5px;
   z-index: 10000;
-  left: 50%;
-  transform: translateX(-50%);
   bottom: 10px;
   border-radius: 22px;
   transition: .5s;
