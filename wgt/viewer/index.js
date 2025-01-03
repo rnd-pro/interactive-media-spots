@@ -13,8 +13,9 @@ export class ImsViewer extends Symbiote {
       if (!srcDataUrl) return;
 
       let srcData = await loadSourceData(srcDataUrl);
+      let overrideVersion = this.getAttribute('version');
       let urlStr = this.$.urlTpl
-        .replaceAll('{{version}}', srcData.version)
+        .replaceAll('{{version}}', overrideVersion || srcData.version || 'latest')
         .replaceAll('{{imsType}}', srcData.imsType);
       await import(urlStr);
       let imsTypeEl = document.createElement(`ims-${srcData.imsType}`);
