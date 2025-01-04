@@ -4,15 +4,15 @@ import { styles } from './styles.js';
 import { ImsVideoData } from './ImsVideoData.js';
 import { Hls } from 'hls.js/dist/hls.mjs';
 
-/** @enum {String} */
-const ICO_MAP = {
-  PLAY: 'play',
-  PAUSE: 'pause',
-  VOL_ON: 'unmute',
-  VOL_OFF: 'mute',
-  CAP_ON: 'captions_on',
-  CAP_OFF: 'captions_off',
-};
+// /** @enum {String} */
+// const ICO_MAP = {
+//   PLAY: 'play',
+//   PAUSE: 'pause',
+//   VOL_ON: 'unmute',
+//   VOL_OFF: 'mute',
+//   CAP_ON: 'captions_on',
+//   CAP_OFF: 'captions_off',
+// };
 
 export class ImsVideo extends ImsBaseClass {
 
@@ -27,24 +27,24 @@ export class ImsVideo extends ImsBaseClass {
   }
 
   toggleCaptions() {
-    if (this.$.capIcon === ICO_MAP.CAP_OFF) {
-      this.$.capIcon = ICO_MAP.CAP_ON;
+    if (this.$.capIcon === 'captions_off') {
+      this.$.capIcon = 'captions_on';
       this.#video?.textTracks.length && (this.#video.textTracks[0].mode = 'showing');
       window.localStorage.setItem(ImsVideo.is + ':captions', '1');
     } else {
-      this.$.capIcon = ICO_MAP.CAP_OFF;
+      this.$.capIcon = 'captions_off';
       this.#video?.textTracks.length && (this.#video.textTracks[0].mode = 'hidden');
       window.localStorage.removeItem(ImsVideo.is + ':captions');
     }
   }
 
   toggleSound() {
-    if (this.$.volIcon === ICO_MAP.VOL_ON) {
-      this.$.volIcon = ICO_MAP.VOL_OFF;
+    if (this.$.volIcon === 'unmute') {
+      this.$.volIcon = 'mute';
       this.$.volumeDisabled = true;
       this.#video.muted = true;
     } else {
-      this.$.volIcon = ICO_MAP.VOL_ON;
+      this.$.volIcon = 'unmute';
       this.$.volumeDisabled = false;
       this.#video.muted = false;
     }
@@ -58,9 +58,9 @@ export class ImsVideo extends ImsBaseClass {
 
   init$ = {
     src: '',
-    ppIcon: ICO_MAP.PLAY,
-    volIcon: ICO_MAP.VOL_ON,
-    capIcon: ICO_MAP.CAP_OFF,
+    ppIcon: 'play',
+    volIcon: 'unmute',
+    capIcon: 'captions_off',
     totalTime: '00:00',
     currentTime: '00:00',
     progressCssWidth: '0',
@@ -173,12 +173,12 @@ export class ImsVideo extends ImsBaseClass {
     this.#castAttributes();
 
     this.#video.addEventListener('play', () => {
-      this.$.ppIcon = ICO_MAP.PAUSE;
+      this.$.ppIcon = 'pause';
       this.setAttribute('playback', '');
     });
 
     this.#video.addEventListener('pause', () => {
-      this.$.ppIcon = ICO_MAP.PLAY;
+      this.$.ppIcon = 'play';
       this.removeAttribute('playback');
     });
 
