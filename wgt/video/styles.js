@@ -29,9 +29,6 @@ export const styles = css`
     padding: 0;
   }
 
-  &[playback] ims-video-toolbar {
-    opacity: 0.2;
-  }
   .progress {
     position: absolute;
     right: 0;
@@ -41,12 +38,23 @@ export const styles = css`
     align-items: flex-end;
     height: 20px;
     cursor: pointer;
+    transition: .2s;
 
     .bar {
       height: 2px;
       background-color: currentColor;
       transition: 0.5s;
     }
+
+    &:hover {
+      .bar {
+        height: 4px;
+        background-color: rgb(240, 0, 0);
+      }
+    }
   }
+}
+:host([playback]) ims-video-toolbar {
+  opacity: .1;
 }
 `;

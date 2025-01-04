@@ -42,6 +42,7 @@ ims-video-toolbar {
   border-radius: 22px;
 
   &:hover {
+    opacity: 1 !important;
     background-color: rgba(0, 0, 0, .6);
     box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
   }
