@@ -167,6 +167,10 @@ All our widgets support:
 
 > IMS is supported by all current versions of popular browsers.
 
+## Articles and Demos
+
+- [Concept details and live demo](https://rnd-pro.com/pulse/interactive-media-spots/)
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
