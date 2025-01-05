@@ -164,6 +164,7 @@ All our widgets support:
 - Interactive hot spots for linking to other content, enabling the creation of more intricate and complex hypermedia stories (Coming soon!)
 - Audio accompaniment (Coming soon!)
 - 3D model viewer (Coming soon!)
+- Lazy loading and advanced cross-widget memory management (Coming soon!)
 
 > IMS is supported by all current versions of popular browsers.
 
