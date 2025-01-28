@@ -5,7 +5,7 @@ export class ImsSpinnerData {
   imsType = 'spinner';
   version = VERSION;
   hideUi = false;
-  baseUrl = '';
+  urlTemplate = '';
   /** @type {String[]} */
   variants = [];
   maxVariantName = '';

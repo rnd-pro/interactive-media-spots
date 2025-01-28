@@ -5,7 +5,7 @@ export class ImsPanoData {
   imsType = 'pano';
   version = VERSION;
   hideUi = false;
-  baseUrl = '';
+  urlTemplate = '';
   /** @type {String[]} */
   variants = [];
   autoplay = false;

@@ -5,7 +5,7 @@ export class ImsGalleryData {
   imsType = 'gallery';
   version = VERSION;
   hideUi = false;
-  baseUrl = '';
+  urlTemplate = '';
   /** @type {String[]} */
   variants = [];
   maxVariantName = '';

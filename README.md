@@ -15,7 +15,7 @@ Configuration example:
 {
   "imsType": "diff",
   "version": "<VERSION>",
-  "baseUrl": "https://your-cdn.com/",
+  "urlTemplate": "https://your-cdn.com/{UID}/{VARIANT}",
   "variants": ["320", "640", "860", "1024"],
   "cdnIdList": ["image1-id", "image2-id"],
   "filters": ["grayscale(100%)", "none"]
@@ -42,7 +42,7 @@ Configuration example:
   "imsType": "pano",
   "version": "<VERSION>",
   "autoplay": false,
-  "baseUrl": "https://your-cdn.com/",
+  "urlTemplate": "https://your-cdn.com/{UID}/{VARIANT}",
   "variants": ["640", "1024", "2048"],
   "cdnIdList": ["panorama-image-id"]
 }
@@ -63,7 +63,7 @@ Configuration example:
   "autoplay": true,
   "speed": 50,
   "showCover": true,
-  "baseUrl": "https://your-cdn.com/",
+  "urlTemplate": "https://your-cdn.com/{UID}/{VARIANT}",
   "variants": ["320", "640", "1024"],
   "cdnIdList": ["frame1-id", "frame2-id", "..."]
 }

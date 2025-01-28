@@ -1,8 +1,8 @@
 {
   "imsType": "spinner",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "hideUi": false,
-  "baseUrl": "https://rnd-pro.com/idn/",
+  "urlTemplate": "https://rnd-pro.com/idn/{UID}/{VARIANT}",
   "variants": [
     "120",
     "320",

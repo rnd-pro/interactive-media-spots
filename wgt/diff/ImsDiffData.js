@@ -5,7 +5,7 @@ export class ImsDiffData {
   imsType = 'diff';
   version = VERSION;
   hideUi = false;
-  baseUrl = '';
+  urlTemplate = '';
   /** @type {String[]} */
   variants = [];
 
